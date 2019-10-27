@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat|Raleway:300,400,700&display=swap");
+* {
+  font-family: "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
+}
+
+html body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+/*# sourceMappingURL=style.css.map */
