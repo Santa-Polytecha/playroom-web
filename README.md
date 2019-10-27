@@ -1,4 +1,4 @@
-# playroom-web
+# Playroom Web
 
 ## Project setup
 ```
