@@ -1,6 +1,8 @@
 <template>
 	<div id="app">
-		<router-view></router-view>
+		<transition name="fade" mode="out-in">
+			<router-view></router-view>
+		</transition>
 	</div>
 </template>
 
@@ -8,14 +10,6 @@
 
 export default {
 	name: "app",
-	computed: {
-		username() {
-			return this.$store.getters.username;
-		},
-		roomName() {
-			return this.$store.getters.roomName;
-		},
-	},
 };
 </script>
 
@@ -34,5 +28,12 @@ export default {
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+	opacity: 0;
 }
 </style>
