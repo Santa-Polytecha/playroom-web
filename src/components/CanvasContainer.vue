@@ -1,6 +1,8 @@
 <template>
-	<div id="canvas-container">
-		<p>Canvas</p>
+	<div id="canvas-container" class="container">
+		<div class="row">
+			<p class="col-12" style="text-align: center; color: black">Canvas</p>
+		</div>
 	</div>
 </template>
 
