@@ -53,7 +53,7 @@ export default {
 					emojiBox.style.left = x - emojiBox.offsetWidth + "px";
 					emojiBox.style.top = y - emojiBox.offsetHeight + "px";
 				}
-			}, 2);
+			}, 1);
 		},
 		onEmojiSelected(emojiData) {
 			this.writingMessage += emojiData.emoji;
@@ -65,7 +65,14 @@ export default {
 					fromMe: true,
 					content: this.writingMessage,
 				});
+				// Empty text field
 				this.writingMessage = '';
+				
+				// Scroll down
+				setTimeout(function() {
+					let chatboxMessagesContainer = document.getElementById("chatbox-messages-container");
+					chatboxMessagesContainer.scrollTop = chatboxMessagesContainer.scrollHeight;
+				}, 1);
 			}
 		},
 	},
