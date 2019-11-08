@@ -1,34 +1,15 @@
 <template>
 	<div id="app">
-		<transition name="component-fade" mode="out-in">
-			<component v-bind:is="view"></component>
+		<transition name="fade" mode="out-in">
+			<router-view></router-view>
 		</transition>
 	</div>
 </template>
 
 <script>
-import ConnectRoom from "./components/ConnectRoom";
-import Room from "./components/Room";
 
 export default {
 	name: "app",
-	components: {
-		ConnectRoom,
-	},
-	computed: {
-		view() {
-			if (this.username === '' || this.roomName === '')
-				return ConnectRoom;
-			else
-				return Room;
-		},
-		username() {
-			return this.$store.getters.username;
-		},
-		roomName() {
-			return this.$store.getters.roomName;
-		},
-	},
 };
 </script>
 
@@ -47,5 +28,12 @@ export default {
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+	opacity: 0;
 }
 </style>

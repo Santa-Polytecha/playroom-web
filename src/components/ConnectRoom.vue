@@ -83,6 +83,7 @@ export default {
 				console.log(`Connecting ${this.username} in the room ${this.searchRoom}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
 				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
+				this.nextPage(this.searchRoom);
 			}
 			else if (this.username === '')
 				console.log("Username cannot be empty");
@@ -90,16 +91,21 @@ export default {
 				console.log("SearchRoom cannot be empty");
 		},
 		onCreateRoomClicked() {
-			if (this.username !== '' && this.createRoom !== '') {
+			if (this.username !== '') {
+				this.searchRoom = this.generateName(1, false, '-');
 				console.log(`Creating the room ${this.createRoom} for ${this.username}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
 				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
+				this.nextPage(this.searchRoom);
 			}
 			else if (this.username === '')
 				console.log("Username cannot be empty");
 			else if (this.createRoom === '')
 				console.log("CreateRoom cannot be empty");
 		},
+		nextPage(id) {
+			this.$router.push("room/" + id)
+		}
 	},
 };
 </script>
