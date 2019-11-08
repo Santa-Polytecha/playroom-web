@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "assets/css/bootstrap";
+@import "assets/css/bootstrap.css";
 @import "assets/css/style";
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 
@@ -47,6 +47,5 @@ export default {
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: $normalTextColor;
 }
 </style>

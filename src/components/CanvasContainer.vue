@@ -1,6 +1,8 @@
 <template>
-	<div id="canvas-container">
-		<p>Canvas</p>
+	<div id="canvas-container" class="container">
+		<div class="row">
+			<p class="col-12">Canvas</p>
+		</div>
 	</div>
 </template>
 
@@ -10,7 +12,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../assets/css/colors.scss";
+@import "../assets/css/metrics.scss";
+
 #canvas-container {
 	width: 100%;
 	min-width: 100%;
@@ -18,6 +23,20 @@ export default {
 	height: 100%;
 	min-height: 100%;
 	max-height: 100%;
-	background-color: #fff3cd;
+	background-color: $grayDark;
+	border-radius: $border-radius-big;
+}
+
+#canvas-container {
+	.row {
+		height: 100%;
+		align-items: center;
+		p {
+			font-size: 100pt;
+			font-weight: bold;
+			text-align: center;
+			color: darken($grayDark, 5);
+		}
+	}
 }
 </style>

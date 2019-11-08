@@ -1,5 +1,6 @@
-@import "colors";
-@import "fonts";
+@import "colors.scss";
+@import "metrics.scss";
+@import "fonts.scss";
 
 * {
 	font-family: 'Raleway', 'Montserrat', Helvetica, Verdana, Arial, sans-serif, serif;
@@ -13,26 +14,11 @@ html, body {
 	margin: 0;
 }
 
-.jumbotron-neon {
-	padding: 2rem 1rem;
-	margin-bottom: 2rem;
-	border-radius: 1rem;
+input[type="text"] {
+	background-color: darken($mainBackgroundColor, 7);
+	color: white;
 }
-.jumbotron-neon-pink {
-	border: 1px solid $pinkLight;
-	box-shadow: inset 0 0 8px $pinkLighter, 0 0 8px $pinkLighter;
-}
-.jumbotron-neon-blue {
-	border: 1px solid $blue;
-	box-shadow: inset 0 0 8px $blue, 0 0 8px $blue;
-}
-.jumbotron-neon-green {
-	border: 1px solid $green;
-	box-shadow: inset 0 0 8px $greenLight, 0 0 8px $greenLight;
-}
-
-@media (min-width: 576px) {
-	.jumbotron {
-		padding: 4rem 2rem;
-	}
+input[type="text"]:focus {
+	background-color: darken($mainBackgroundColor, 7);
+	color: white;
 }
