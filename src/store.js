@@ -1,6 +1,33 @@
 export const state = {
 	username: "",
 	roomName: "",
+	tools: [
+		{
+			id: 0,
+			name: "Brush",
+			materialIconName: "brush",
+			colorId: "primary",
+		},
+		{
+			id: 1,
+			name: "Eraser",
+			materialIconName: "format_color_reset",
+			colorId: "warning",
+		},
+		{
+			id: 2,
+			name: "Palette",
+			materialIconName: "palette",
+			colorId: "danger",
+		},
+		{
+			id: 3,
+			name: "Color Picker",
+			materialIconName: "colorize",
+			colorId: "success",
+		},
+	],
+	currentTool: 0,
 };
 
 export const getters = {
@@ -9,6 +36,12 @@ export const getters = {
 	},
 	roomName(state) {
 		return state.roomName;
+	},
+	tools(state) {
+		return state.tools;
+	},
+	currentTool(state) {
+		return state.currentTool;
 	},
 };
 
@@ -19,6 +52,9 @@ export const actions = {
 	onRoomNameChanged(toolkit, payload) {
 		toolkit.commit("setRoomName", payload);
 	},
+	onCurrentToolChanged(toolkit, payload) {
+		toolkit.commit("setCurrentTool", payload);
+	},
 };
 
 export const mutations = {
@@ -27,5 +63,8 @@ export const mutations = {
 	},
 	setRoomName(state, payload) {
 		state.roomName = payload;
+	},
+	setCurrentTool(state, payload) {
+		state.currentTool = payload;
 	},
 };
