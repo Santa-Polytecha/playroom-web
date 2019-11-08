@@ -15,27 +15,27 @@
  */
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
 :root {
-  --blue: #DF691A;
-  --indigo: #6610f2;
-  --purple: #6f42c1;
-  --pink: #e83e8c;
-  --red: #d9534f;
-  --orange: #f0ad4e;
-  --yellow: #f0ad4e;
-  --green: #5cb85c;
-  --teal: #20c997;
-  --cyan: #5bc0de;
+  --blue: $blue;
+  --indigo: $purpleDark;
+  --purple: $purple;
+  --pink: $pink;
+  --red: $red;
+  --orange: $orange;
+  --yellow: $yellow;
+  --green: $green;
+  --teal: $cyanDark;
+  --cyan: $cyan;
   --white: #fff;
-  --gray: #868e96;
-  --gray-dark: #343a40;
-  --primary: #DF691A;
-  --secondary: #4E5D6C;
-  --success: #5cb85c;
-  --info: #5bc0de;
-  --warning: #f0ad4e;
-  --danger: #d9534f;
-  --light: #abb6c2;
-  --dark: #4E5D6C;
+  --gray: $gray;
+  --gray-dark: $grayDark;
+  --primary: $blue;
+  --secondary: $red;
+  --success: $green;
+  --info: $navy;
+  --warning: $orangeLight;
+  --danger: $redLight;
+  --light: $grayLight;
+  --dark: $grayDark;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -164,7 +164,7 @@ sup {
 }
 
 a {
-  color: #DF691A;
+  color: $primaryColor;
   text-decoration: none;
   background-color: transparent;
 }
@@ -2048,8 +2048,8 @@ pre code {
   background-color: #fff;
   border-color: #f1b287;
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .form-control::-webkit-input-placeholder {
@@ -2592,8 +2592,8 @@ textarea.form-control {
 
 .btn:focus, .btn.focus {
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .btn.disabled, .btn:disabled {
@@ -2607,38 +2607,38 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #DF691A;
-  border-color: #DF691A;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #bd5916;
-  border-color: #b15315;
+  background-color: $primaryColorDark;
+  border-color: $primaryColorDark;
 }
 
 .btn-primary:focus, .btn-primary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(228, 128, 60, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(228, 128, 60, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
   color: #fff;
-  background-color: #DF691A;
-  border-color: #DF691A;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active,
 .show > .btn-primary.dropdown-toggle {
   color: #fff;
-  background-color: #b15315;
-  border-color: #a64e13;
+  background-color: $primaryColorDark;
+  border-color: $primaryColorDark;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active:focus, .btn-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(228, 128, 60, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(228, 128, 60, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
 }
 
 .btn-secondary {
@@ -2894,37 +2894,37 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary {
-  color: #DF691A;
-  border-color: #DF691A;
+  color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .btn-outline-primary:hover {
   color: #fff;
-  background-color: #DF691A;
-  border-color: #DF691A;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
-  color: #DF691A;
+  color: $primaryColor;
   background-color: transparent;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
 .show > .btn-outline-primary.dropdown-toggle {
   color: #fff;
-  background-color: #DF691A;
-  border-color: #DF691A;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .btn-outline-primary:not(:disabled):not(.disabled):active:focus, .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-primary.dropdown-toggle:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
 }
 
 .btn-outline-secondary {
@@ -3167,7 +3167,7 @@ fieldset:disabled a.btn {
 
 .btn-link {
   font-weight: 400;
-  color: #DF691A;
+  color: $primaryColor;
   text-decoration: none;
 }
 
@@ -3471,7 +3471,7 @@ input[type="button"].btn-block {
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #DF691A;
+  background-color: $primaryColor;
 }
 
 .dropdown-item.disabled, .dropdown-item:disabled {
@@ -3859,13 +3859,13 @@ input[type="button"].btn-block {
 
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
-  border-color: #DF691A;
-  background-color: #DF691A;
+  border-color: $primaryColor;
+  background-color: $primaryColor;
 }
 
 .custom-control-input:focus ~ .custom-control-label::before {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
@@ -3925,8 +3925,8 @@ input[type="button"].btn-block {
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::before {
-  border-color: #DF691A;
-  background-color: #DF691A;
+  border-color: $primaryColor;
+  background-color: $primaryColor;
 }
 
 .custom-checkbox .custom-control-input:indeterminate ~ .custom-control-label::after {
@@ -3934,11 +3934,11 @@ input[type="button"].btn-block {
 }
 
 .custom-checkbox .custom-control-input:disabled:checked ~ .custom-control-label::before {
-  background-color: rgba(223, 105, 26, 0.5);
+  background-color: rgba($primaryColorDark, 0.5);
 }
 
 .custom-checkbox .custom-control-input:disabled:indeterminate ~ .custom-control-label::before {
-  background-color: rgba(223, 105, 26, 0.5);
+  background-color: rgba($primaryColorDark, 0.5);
 }
 
 .custom-radio .custom-control-label::before {
@@ -3950,7 +3950,7 @@ input[type="button"].btn-block {
 }
 
 .custom-radio .custom-control-input:disabled:checked ~ .custom-control-label::before {
-  background-color: rgba(223, 105, 26, 0.5);
+  background-color: rgba($primaryColorDark, 0.5);
 }
 
 .custom-switch {
@@ -3991,7 +3991,7 @@ input[type="button"].btn-block {
 }
 
 .custom-switch .custom-control-input:disabled:checked ~ .custom-control-label::before {
-  background-color: rgba(223, 105, 26, 0.5);
+  background-color: rgba($primaryColorDark, 0.5);
 }
 
 .custom-select {
@@ -4016,8 +4016,8 @@ input[type="button"].btn-block {
 .custom-select:focus {
   border-color: #f1b287;
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .custom-select:focus::-ms-value {
@@ -4075,8 +4075,8 @@ input[type="button"].btn-block {
 
 .custom-file-input:focus ~ .custom-file-label {
   border-color: #f1b287;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .custom-file-input:disabled ~ .custom-file-label {
@@ -4139,16 +4139,16 @@ input[type="button"].btn-block {
 }
 
 .custom-range:focus::-webkit-slider-thumb {
-  -webkit-box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .custom-range:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .custom-range:focus::-ms-thumb {
-  box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  box-shadow: 0 0 0 1px #2B3E50, 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .custom-range::-moz-focus-outer {
@@ -4159,7 +4159,7 @@ input[type="button"].btn-block {
   width: 1rem;
   height: 1rem;
   margin-top: -0.25rem;
-  background-color: #DF691A;
+  background-color: $primaryColor;
   border: 0;
   border-radius: 1rem;
   -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -4194,7 +4194,7 @@ input[type="button"].btn-block {
 .custom-range::-moz-range-thumb {
   width: 1rem;
   height: 1rem;
-  background-color: #DF691A;
+  background-color: $primaryColor;
   border: 0;
   border-radius: 1rem;
   -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -4232,7 +4232,7 @@ input[type="button"].btn-block {
   margin-top: 0;
   margin-right: 0.2rem;
   margin-left: 0.2rem;
-  background-color: #DF691A;
+  background-color: $primaryColor;
   border: 0;
   border-radius: 1rem;
   -webkit-transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
@@ -4382,7 +4382,7 @@ input[type="button"].btn-block {
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #DF691A;
+  background-color: $primaryColor;
 }
 
 .nav-fill .nav-item {
@@ -5189,8 +5189,8 @@ input[type="button"].btn-block {
 .page-link:focus {
   z-index: 2;
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.25);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.25);
 }
 
 .page-item:first-child .page-link {
@@ -5207,8 +5207,8 @@ input[type="button"].btn-block {
 .page-item.active .page-link {
   z-index: 1;
   color: #fff;
-  background-color: #DF691A;
-  border-color: #DF691A;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .page-item.disabled .page-link {
@@ -5295,18 +5295,18 @@ a.badge:hover, a.badge:focus {
 
 .badge-primary {
   color: #fff;
-  background-color: #DF691A;
+  background-color: $primaryColor;
 }
 
 a.badge-primary:hover, a.badge-primary:focus {
   color: #fff;
-  background-color: #b15315;
+  background-color: $primaryColorDark;
 }
 
 a.badge-primary:focus, a.badge-primary.focus {
   outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.5);
-          box-shadow: 0 0 0 0.2rem rgba(223, 105, 26, 0.5);
+  -webkit-box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
+          box-shadow: 0 0 0 0.2rem rgba($primaryColorDark, 0.5);
 }
 
 .badge-secondary {
@@ -5623,7 +5623,7 @@ a.badge-dark:focus, a.badge-dark.focus {
   color: #fff;
   text-align: center;
   white-space: nowrap;
-  background-color: #DF691A;
+  background-color: $primaryColor;
   -webkit-transition: width 0.6s ease;
   transition: width 0.6s ease;
 }
@@ -5726,8 +5726,8 @@ a.badge-dark:focus, a.badge-dark.focus {
 .list-group-item.active {
   z-index: 2;
   color: #fff;
-  background-color: #DF691A;
-  border-color: #DF691A;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
 }
 
 .list-group-horizontal {
@@ -6906,13 +6906,13 @@ a.close.disabled {
 }
 
 .bg-primary {
-  background-color: #DF691A !important;
+  background-color: $primaryColor !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
-  background-color: #b15315 !important;
+  background-color: $primaryColorDark !important;
 }
 
 .bg-secondary {
@@ -7034,7 +7034,7 @@ button.bg-dark:focus {
 }
 
 .border-primary {
-  border-color: #DF691A !important;
+  border-color: $primaryColor !important;
 }
 
 .border-secondary {
@@ -10363,7 +10363,7 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-  color: #DF691A !important;
+  color: $primaryColor !important;
 }
 
 a.text-primary:hover, a.text-primary:focus {
@@ -10556,7 +10556,7 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .btn-primary {
-  background-color: #DF691A;
+  background-color: $primaryColor;
 }
 
 .btn-secondary {
@@ -10627,7 +10627,7 @@ a.text-dark:hover, a.text-dark:focus {
 .table-primary,
 .table-primary > th,
 .table-primary > td {
-  background-color: #DF691A;
+  background-color: $primaryColor;
 }
 
 .table-secondary,
@@ -10751,7 +10751,7 @@ label,
 }
 
 .alert-primary {
-  background-color: #DF691A;
+  background-color: $primaryColor;
 }
 
 .alert-secondary {
