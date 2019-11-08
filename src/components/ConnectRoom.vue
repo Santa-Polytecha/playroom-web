@@ -21,7 +21,7 @@
 				<form class="col-12 row">
 					<label for="search-room-text" class="col-12">Search for a room</label>
 					<input type="text" class="form-control col-9" id="search-room-text" name="search-room-text" :placeholder="this.generateName(2, undefined, '-')" @input="onSearchRoomChanged"/>
-					<input type="button" class="btn btn-outline-primary col-3" id="search-room-button" name="search-room-button" value="Connect" @click="onConnectRoomClicked"/>
+					<input type="button" class="btn btn-primary col-3" id="search-room-button" name="search-room-button" value="Connect" @click="onConnectRoomClicked"/>
 				</form>
 			</div>
 		</div>
@@ -30,9 +30,7 @@
 			<h2 class="col-12">Create a new room</h2>
 			<div class="col-12 container">
 				<form class="col-12 row">
-					<label for="create-room-text" class="col-12">Room name</label>
-					<input type="text" class="form-control col-9" id="create-room-text" name="create-room-text" :placeholder="this.generateName(2, undefined, '-')" @input="onCreateRoomChanged"/>
-					<input type="button" class="btn btn-outline-primary col-3" id="create-room-button" name="create-room-button" value="Create" @click="onCreateRoomClicked"/>
+					<input type="button" class="btn btn-primary col-12" id="create-room-button" name="create-room-button" value="Create" @click="onCreateRoomClicked"/>
 				</form>
 			</div>
 		</div>
@@ -107,7 +105,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../assets/css/style";
+@import "../assets/css/style.scss";
 
 #connect-room {
 	width: 50%;
@@ -146,11 +144,16 @@ hr {
 	margin: 20px 0;
 }
 
-#search-room-text, #create-room-text {
-	border-radius: 500px 0 0 500px;
+.btn {
+	text-transform: uppercase;
 }
 
-#search-room-button, #create-room-button {
-	border-radius: 0 500px 500px 0;
+#search-room-text {
+	border-right-width: 0;
+	border-radius: $border-radius 0 0 $border-radius;
+}
+
+#search-room-button {
+	border-radius: 0 $border-radius $border-radius 0;
 }
 </style>
