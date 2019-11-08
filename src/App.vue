@@ -1,27 +1,14 @@
 <template>
 	<div id="app">
-		<transition name="component-fade" mode="out-in">
-			<component v-bind:is="view"></component>
-		</transition>
+		<router-view></router-view>
 	</div>
 </template>
 
 <script>
-import ConnectRoom from "./components/ConnectRoom";
-import Room from "./components/Room";
 
 export default {
 	name: "app",
-	components: {
-		ConnectRoom,
-	},
 	computed: {
-		view() {
-			if (this.username === '' || this.roomName === '')
-				return ConnectRoom;
-			else
-				return Room;
-		},
 		username() {
 			return this.$store.getters.username;
 		},
