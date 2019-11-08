@@ -5,19 +5,17 @@
 		</div>
 		
 		<div id="chatbox-messages-container" class="row">
-			<div class="container">
-				<ChatMessage author="Lea" :date="1573227140" content="Hey!"/>
-				<ChatMessage author="Valentin" :date="1573227142" content="Hey back!" :from-me="true"/>
-				<ChatMessage author="Antoine" :date="1573227200" content="Hey there!"/>
-				<ChatMessage author="Antoine" :date="1573227400" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi venenatis rhoncus tortor sed congue. Ut consectetur pretium orci vel pellentesque. Aenean turpis magna, sodales suscipit molestie quis, ullamcorper ut turpis. Donec sodales orci vel dui semper, ut pellentesque diam convallis. Maecenas vitae enim vel libero accumsan sodales. Pellentesque eget enim sodales, eleifend purus quis, sodales libero. Vivamus et tortor metus. Mauris turpis turpis, hendrerit in tellus et, finibus gravida dolor. Phasellus eu semper tortor, vel venenatis ex. Pellentesque blandit elementum odio quis tempor. Sed bibendum enim mauris, et iaculis magna malesuada vel. Phasellus faucibus congue neque, non faucibus metus fermentum ac. Ut leo lacus, faucibus in dictum sed, sollicitudin at urna. Praesent a tristique lacus. Donec condimentum mauris eget velit vestibulum feugiat. Quisque in malesuada mauris. Pellentesque ultrices neque sit amet neque tristique, et suscipit elit ultricies. Morbi venenatis felis nibh, ac scelerisque metus dictum eu. Praesent auctor nunc risus, sed sagittis quam fringilla scelerisque. Maecenas eget dictum dui. Nam pellentesque maximus gravida. Quisque et auctor risus. Integer interdum vel eros at ullamcorper. Quisque in metus a purus cursus venenatis. Mauris aliquam felis et eros maximus hendrerit. Etiam eu purus suscipit, tincidunt massa non, ornare justo. Etiam tincidunt ultrices fermentum. Aenean vel augue ac purus hendrerit rhoncus ut at ligula. Fusce aliquam mi vitae aliquet fermentum. Mauris lobortis et quam sed facilisis. Ut sit amet nibh turpis. Mauris et lorem blandit, sagittis odio nec, dapibus nunc. Cras vel eros ac eros mollis egestas in id erat. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer enim nisl, malesuada eget erat ut, mollis feugiat ex. Sed tincidunt, nibh vitae condimentum ultricies, augue elit auctor ligula, mattis sollicitudin urna urna imperdiet lorem. Donec rutrum egestas nibh, at ultricies tortor blandit ac. Pellentesque turpis ex, fermentum ac massa sed, convallis posuere urna. Phasellus turpis sem, semper nec fermentum vitae, mollis eget urna. Ut molestie eu est ut suscipit. Phasellus non nisi hendrerit, mollis purus eu, finibus dui. Nam mollis semper nunc a hendrerit. Proin commodo lacus non tempor placerat. Etiam ullamcorper sit amet orci quis dignissim. Vestibulum pharetra turpis vel varius tempus. Nam venenatis pulvinar pretium. Mauris id pulvinar urna, non lacinia ex. Proin molestie odio rutrum metus dictum, vel mattis enim sagittis. Integer venenatis justo vitae arcu convallis, at luctus nisl lacinia. Maecenas pulvinar pellentesque rutrum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla vulputate mi dolor, id rutrum ligula scelerisque nec. Duis pharetra ligula ac urna rutrum faucibus id ac lorem."/>
+			<div class="container" :class="{'align-items-center flex-row  justify-content-center': messages.length === 0}">
+				<ChatMessage v-for="message in messages" v-bind="message" :key="message.id"/>
+				<p v-if="messages.length === 0" class="no-messages-text">No messages</p>
 			</div>
 		</div>
 		
 		<div id="chatbox-compose-container">
-			<form class="row">
+			<form class="row" @submit.prevent="addMessage">
 				<!--suppress HtmlFormInputWithoutLabel -->
-				<input type="text" class="form-control col-10" placeholder="Message"/>
-				<button type="button" class="col-2 btn btn-primary"><i class="material-icons">send</i></button>
+				<input type="text" class="form-control col-10" placeholder="Message" v-model="writingMessage"/>
+				<button type="button" class="col-2 btn btn-primary" :class="{disabled: this.writingMessage.length === 0}" @click="addMessage"><i class="material-icons">send</i></button>
 			</form>
 		</div>
 	</div>
@@ -28,6 +26,31 @@ import ChatMessage from "./ChatMessage";
 export default {
 	name: "ChatBox",
 	components: { ChatMessage },
+	data() {
+		return {
+			writingMessage: '',
+		};
+	},
+	methods: {
+		addMessage() {
+			if (this.writingMessage !== null && this.writingMessage !== undefined && this.writingMessage.length > 0) {
+				this.$store.dispatch("onMessagesAdded", {
+					author: this.username,
+					fromMe: true,
+					content: this.writingMessage,
+				});
+				this.writingMessage = '';
+			}
+		},
+	},
+	computed: {
+		username() {
+			return this.$store.getters.username;
+		},
+		messages() {
+			return this.$store.getters.messages;
+		},
+	},
 };
 </script>
 
@@ -69,6 +92,13 @@ export default {
 	border-radius: $border-radius-big;
 	overflow: auto;
 	overflow-y: scroll;
+	.no-messages-text {
+		align-self: center;
+		font-family: "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
+		color: rgba(white, 0.3);
+		font-size: 20pt;
+		font-weight: bold;
+	}
 }
 #chatbox-messages-container > .container {
 	display: flex;

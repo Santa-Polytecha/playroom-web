@@ -5,7 +5,7 @@
 			<p v-if="this.date > 0" class="date">{{formatDate(this.date)}}</p>
 		</div>
 		<div class="row message-body">
-			<p class="content">{{this.content}}</p>
+			<p class="content"><span v-html="this.content"></span></p>
 		</div>
 	</div>
 </template>
@@ -26,7 +26,7 @@ export default {
 		date: {
 			type: Number,
 			required: false,
-			default: 0,
+			default: new Date().getTime() / 1000,
 		},
 		content: {
 			type: String,
@@ -43,10 +43,20 @@ export default {
 			let diff = new Date(Math.abs(now_s - timestamp_s) * 1000);
 			console.log(diff);
 			
-			let content = `${date.getHours()}:${date.getMinutes()}`;
+			let leadingZero1 = '';
+			let leadingZero2 = '';
+			if (date.getHours() < 10)
+				leadingZero1 = '0';
+			if (date.getMinutes() < 10)
+				leadingZero2 = '0';
 			
-			if (diff.getDate() !== 0)
-				content += ` ${date.getDate()}/${date.getMonth()}`;
+			let content = `${leadingZero1}${date.getHours()}:${leadingZero2}${date.getMinutes()}`;
+			
+			leadingZero1 = date.getDate() < 10 ? '0' : '';
+			leadingZero2 = date.getMonth() < 10 ? '0' : '';
+			
+			if (diff.getDate() > 1)
+				content += ` ${leadingZero1}${date.getDate()}/${leadingZero2}${date.getMonth()}`;
 			if (diff.getFullYear() - 1970 !== 0)
 				content += `/${date.getFullYear()}`;
 			
