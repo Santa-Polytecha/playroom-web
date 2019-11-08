@@ -55,7 +55,7 @@ export default {
 	margin-bottom: 0;
 	padding: 10px;
 	flex-grow: 2;
-	background-color: darken($mainBackgroundColor, 5);
+	background-color: darken($mainBackgroundColor, 4);
 	border-radius: $border-radius-big;
 	.container {
 		margin: 0;
@@ -72,6 +72,12 @@ export default {
 		input {
 			height: auto;
 			align-items: stretch;
+		}
+		input[type="text"] {
+			border-radius: $border-radius-big 0 0 $border-radius-big;
+		}
+		input[type="text"] + input[type="button"], input[type="text"] + button {
+			border-radius: 0 $border-radius-big $border-radius-big 0;
 		}
 	}
 }

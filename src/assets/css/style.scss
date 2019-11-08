@@ -13,3 +13,12 @@ html, body {
 	max-height: 100%;
 	margin: 0;
 }
+
+input[type="text"] {
+	background-color: darken($mainBackgroundColor, 7);
+	color: white;
+}
+input[type="text"]:focus {
+	background-color: darken($mainBackgroundColor, 7);
+	color: white;
+}

@@ -11,4 +11,14 @@ html, body {
   margin: 0;
 }
 
+input[type=text] {
+  background-color: #26282c;
+  color: white;
+}
+
+input[type=text]:focus {
+  background-color: #26282c;
+  color: white;
+}
+
 /*# sourceMappingURL=style.css.map */

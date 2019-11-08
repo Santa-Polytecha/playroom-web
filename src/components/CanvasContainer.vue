@@ -1,7 +1,7 @@
 <template>
 	<div id="canvas-container" class="container">
 		<div class="row">
-			<p class="col-12" style="text-align: center; color: black">Canvas</p>
+			<p class="col-12">Canvas</p>
 		</div>
 	</div>
 </template>
@@ -23,7 +23,20 @@ export default {
 	height: 100%;
 	min-height: 100%;
 	max-height: 100%;
-	background-color: $grayLight;
+	background-color: $grayDark;
 	border-radius: $border-radius-big;
+}
+
+#canvas-container {
+	.row {
+		height: 100%;
+		align-items: center;
+		p {
+			font-size: 100pt;
+			font-weight: bold;
+			text-align: center;
+			color: darken($grayDark, 5);
+		}
+	}
 }
 </style>

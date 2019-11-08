@@ -63,7 +63,8 @@ export default {
 }
 
 h1 {
-	margin: 5px 20px 5px 5px;
+	font-size: 27pt;
+	margin: 20px;
 }
 
 ul {
