@@ -15,7 +15,7 @@
 			</div>
 		</div>
 		
-		<div class="row jumbotron-neon jumbotron-neon-pink">
+		<div class="row">
 			<h2 class="col-12">Connect to an existing room</h2>
 			<div class="col-12 container">
 				<form class="col-12 row">
@@ -26,7 +26,7 @@
 			</div>
 		</div>
 		
-		<div class="row jumbotron-neon jumbotron-neon-green">
+		<div class="row">
 			<h2 class="col-12">Create a new room</h2>
 			<div class="col-12 container">
 				<form class="col-12 row">

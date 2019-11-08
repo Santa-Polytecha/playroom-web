@@ -4,6 +4,7 @@
     <enabled-global>
       <option value="SCSS" />
       <option value="Prettier JS" />
+      <option value="YUI Compressor CSS" />
     </enabled-global>
   </component>
 </project>
