@@ -33,7 +33,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "assets/css/bootstrap";
+@import "assets/css/bootstrap.css";
 @import "assets/css/style";
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 
