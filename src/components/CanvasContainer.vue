@@ -10,7 +10,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../assets/css/colors.scss";
+@import "../assets/css/metrics.scss";
+
 #canvas-container {
 	width: 100%;
 	min-width: 100%;
@@ -18,6 +21,7 @@ export default {
 	height: 100%;
 	min-height: 100%;
 	max-height: 100%;
-	background-color: #fff3cd;
+	background-color: $grayLight;
+	border-radius: $border-radius-big;
 }
 </style>

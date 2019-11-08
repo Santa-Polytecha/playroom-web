@@ -1,6 +1,7 @@
 <template>
-	<div id="chatbox-container">
+	<div id="chatbox-container" class="container">
 		<p>Chatbox</p>
+		<hr/>
 	</div>
 </template>
 
@@ -10,7 +11,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../assets/css/colors.scss";
+@import "../assets/css/metrics.scss";
+
 #chatbox-container {
 	width: 100%;
 	min-width: 100%;
@@ -18,6 +22,6 @@ export default {
 	height: 100%;
 	min-height: 100%;
 	max-height: 100%;
-	background-color: #f5c6cb;
+	background-color: $mainBackgroundColor;
 }
 </style>

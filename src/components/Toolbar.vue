@@ -16,7 +16,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../assets/css/colors.scss";
+
 #toolbar-container {
 	width: 100%;
 	min-width: 100%;
@@ -25,7 +27,7 @@ export default {
 	min-height: 100%;
 	max-height: 100%;
 	padding-left: 20px;
-	background-color: #8fd19e;
+	background-color: $mainBackgroundColor;
 }
 
 #toolbar-container > h1 {
