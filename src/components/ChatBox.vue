@@ -13,9 +13,11 @@
 		
 		<div id="chatbox-compose-container">
 			<form class="row" @submit.prevent="addMessage">
+				<button type="button" class="col-1 btn-emoji" @click="toggleDialogEmoji"><i class="material-icons">emoji_emotions</i></button>
+				<VEmojiPicker v-show="emojiDialogShown" class="emoji-picker-box" :pack="emojisNative" labelSearch="Search" @select="onEmojiSelected"/>
 				<!--suppress HtmlFormInputWithoutLabel -->
-				<input type="text" class="form-control col-10" placeholder="Message" v-model="writingMessage"/>
-				<button type="button" class="col-2 btn btn-primary" :class="{disabled: this.writingMessage.length === 0}" @click="addMessage"><i class="material-icons">send</i></button>
+				<input type="text" class="form-control col-9" placeholder="Message" v-model="writingMessage"/>
+				<button type="button" class="col-2 btn btn-primary btn-send" :class="{disabled: this.writingMessage.length === 0}" @click="addMessage"><i class="material-icons">send</i></button>
 			</form>
 		</div>
 	</div>
@@ -23,15 +25,39 @@
 
 <script>
 import ChatMessage from "./ChatMessage";
+import VEmojiPicker from "v-emoji-picker";
+import packEmoji from 'v-emoji-picker/data/emojis.js';
+
 export default {
 	name: "ChatBox",
-	components: { ChatMessage },
+	components: {
+		ChatMessage,
+		VEmojiPicker,
+	},
 	data() {
 		return {
 			writingMessage: '',
+			emojiDialogShown: false,
 		};
 	},
 	methods: {
+		toggleDialogEmoji() {
+			this.emojiDialogShown = !this.emojiDialogShown;
+			setTimeout(function() {
+				let emojiBox = document.getElementsByClassName("emoji-picker-box")[0];
+				let emojiButton = document.getElementsByClassName("btn-emoji")[0];
+				if (emojiBox.offsetWidth > 0) {
+					let x = emojiButton.getBoundingClientRect().left;
+					let y = emojiButton.getBoundingClientRect().top;
+					console.log(x, y);
+					emojiBox.style.left = x - emojiBox.offsetWidth + "px";
+					emojiBox.style.top = y - emojiBox.offsetHeight + "px";
+				}
+			}, 2);
+		},
+		onEmojiSelected(emojiData) {
+			this.writingMessage += emojiData.emoji;
+		},
 		addMessage() {
 			if (this.writingMessage !== null && this.writingMessage !== undefined && this.writingMessage.length > 0) {
 				this.$store.dispatch("onMessagesAdded", {
@@ -44,6 +70,9 @@ export default {
 		},
 	},
 	computed: {
+		emojisNative() {
+			return packEmoji;
+		},
 		username() {
 			return this.$store.getters.username;
 		},
@@ -118,12 +147,27 @@ export default {
 			height: auto;
 			align-items: stretch;
 		}
+		input[type="button"], button {
+			padding: 6px;
+		}
 		input[type="text"] {
 			border-radius: $border-radius-big 0 0 $border-radius-big;
 		}
-		input[type="text"] + input[type="button"], input[type="text"] + button {
+		input[type="text"] + .btn-send {
 			border-radius: 0 $border-radius-big $border-radius-big 0;
 		}
+		.btn-emoji {
+			padding: 3px 10px 3px 3px;
+			background: none;
+			border: none;
+			color: rgba(white, 0.5);
+		}
 	}
+}
+
+.emoji-picker-box {
+	position: fixed;
+	top: 10000px;
+	left: 10000px;
 }
 </style>

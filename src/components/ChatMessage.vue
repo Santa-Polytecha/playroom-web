@@ -41,7 +41,6 @@ export default {
 			
 			let date = new Date(timestamp_s * 1000);
 			let diff = new Date(Math.abs(now_s - timestamp_s) * 1000);
-			console.log(diff);
 			
 			let leadingZero1 = '';
 			let leadingZero2 = '';
