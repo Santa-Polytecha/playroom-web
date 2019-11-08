@@ -1,10 +1,10 @@
 <template>
 	<div class="container chat-message-container" :class="{'from-me': this.fromMe}">
-		<div class="row">
+		<div class="row message-header">
 			<p class="author">{{this.author}}</p>
 			<p v-if="this.date > 0" class="date">{{formatDate(this.date)}}</p>
 		</div>
-		<div class="row">
+		<div class="row message-body">
 			<p class="content">{{this.content}}</p>
 		</div>
 	</div>
@@ -69,12 +69,21 @@ export default {
 	overflow: hidden;
 	.row {
 		margin: 0;
-		padding: 5px;
+		padding: 0;
 	}
 	p {
+		margin: 0;
 		font-family: "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
+		line-height: 1.2rem;
+	}
+	.message-header {
+		margin: 5px 0 0 2px;
+	}
+	.message-body {
+		margin: 0 0 5px 0;
 	}
 	.author {
+		font-weight: bold;
 		font-size: 10pt;
 	}
 	.date {
