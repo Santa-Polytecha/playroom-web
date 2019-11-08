@@ -10,7 +10,7 @@
 			<div class="col-12 container">
 				<form class="col-12 row">
 					<label for="username-text" class="col-12">Username</label>
-					<input type="text" class="form-control col-12" id="username-text" name="username-text" :placeholder="this.generateName(2)" @input="onUsernameChanged"/>
+					<input type="text" class="form-control col-12" id="username-text" name="username-text" :placeholder="this.generateName(4)" @input="onUsernameChanged"/>
 				</form>
 			</div>
 		</div>
@@ -45,9 +45,11 @@ export default {
 	name: "ConnectRoom",
 	data() {
 		return {
-			adjectives: ["little", "sweet", "fluffy", "squared", "cubic", "smiling", "jumping", "cute", "supportive"],
+			adjectives: ["little", "sweet", "fluffy", "squared", "cubic", "smiling", "jumping", "cute", "supportive",
+					"pink", "blue", "purple", "creamy", "delicious"],
 			nouns: ["brioche", "pancakes", "strawberry", "blueberry", "lollipop", "muffin", "marshmallow", "candy",
-					"gum", "jelly"],
+					"gum", "jelly", "cake", "chocolate", "doughnut", "croissant", "macaroon", "cupcake", "waffles",
+					"cookie"],
 			username: '',
 			searchRoom: '',
 			createRoom: '',
@@ -79,16 +81,22 @@ export default {
 			this.createRoom = event.target.value;
 		},
 		onConnectRoomClicked() {
-			if (this.username !== '' && this.searchRoom !== '')
+			if (this.username !== '' && this.searchRoom !== '') {
 				console.log(`Connecting ${this.username} in the room ${this.searchRoom}...`);
+				this.$store.dispatch("onUsernameChanged", this.username);
+				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
+			}
 			else if (this.username === '')
 				console.log("Username cannot be empty");
 			else if (this.searchRoom === '')
 				console.log("SearchRoom cannot be empty");
 		},
 		onCreateRoomClicked() {
-			if (this.username !== '' && this.createRoom !== '')
+			if (this.username !== '' && this.createRoom !== '') {
 				console.log(`Creating the room ${this.createRoom} for ${this.username}...`);
+				this.$store.dispatch("onUsernameChanged", this.username);
+				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
+			}
 			else if (this.username === '')
 				console.log("Username cannot be empty");
 			else if (this.createRoom === '')
