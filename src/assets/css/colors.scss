@@ -2,6 +2,7 @@
 
 $primaryColor: $blue;
 $primaryColorDark: $blueDark;
+$primaryColorBackground: darken($primaryColor, 20);
 $normalTextColor: #121417;
 $headerTextColor: #565666;
 $labelTextColor: #727287;

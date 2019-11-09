@@ -14,6 +14,12 @@ html, body {
 	margin: 0;
 }
 
+h1 {
+	font-family: "Comfortaa", "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
+	font-weight: bold;
+	color: white;
+}
+
 input[type="text"] {
 	background-color: darken($mainBackgroundColor, 7);
 	color: white;

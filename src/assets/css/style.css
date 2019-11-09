@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat|Raleway:300,400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Comfortaa:400,700|Montserrat|Raleway:300,400,700&display=swap");
 * {
   font-family: "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
 }
@@ -9,6 +9,12 @@ html, body {
   min-height: 100%;
   max-height: 100%;
   margin: 0;
+}
+
+h1 {
+  font-family: "Comfortaa", "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
+  font-weight: bold;
+  color: white;
 }
 
 input[type=text] {
