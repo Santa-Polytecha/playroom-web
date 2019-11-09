@@ -1,7 +1,7 @@
 <template>
 	<div class="container" id="connect-room">
 		<div class="row">
-			<div class="col-6 first-row">
+			<div class="col-xl-6 col-lg-6  col-md-6 col-sm-12 first-row">
 				<div class="container">
 					<div class="row" id="title-row">
 						<h1 class="col-12">Playroom</h1>
@@ -15,7 +15,7 @@
 				</div>
 			</div>
 			
-			<div class="col-6  second-row">
+			<div class="col-xl-6 col-lg-6  col-md-6 col-sm-12 second-row">
 				<div class="container">
 					
 					<div class="row">
@@ -133,8 +133,6 @@ export default {
 	max-width: 100%;
 	height: 100%;
 	min-height: 100%;
-	max-height: 100%;
-	overflow: hidden;
 	margin: 0;
 	padding: 0;
 	.row {
@@ -151,8 +149,6 @@ export default {
 		display: flex;
 		align-items: center;
 	}
-	/*.first-row > .container, .second-row > .container {*/
-	/*}*/
 }
 
 h1, h2, h3, h4, h5, h6, p {
