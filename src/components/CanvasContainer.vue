@@ -24,7 +24,7 @@ export default {
 	min-height: 100%;
 	max-height: 100%;
 	background-color: $grayDark;
-	border-radius: $border-radius-big;
+	border-radius: 0 $border-radius-big 0 0;
 }
 
 #canvas-container {

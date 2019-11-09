@@ -143,7 +143,7 @@ export default {
 		padding: 20px 0;
 	}
 	.first-row {
-		background-color: darken($primaryColor, 20);
+		background-color: $primaryColorBackground;
 	}
 	.first-row, .second-row {
 		display: flex;

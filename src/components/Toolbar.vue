@@ -1,6 +1,6 @@
 <template>
 	<div id="toolbar-container" class="d-flex align-items-center">
-		<h1>Playroom</h1>
+		<router-link to="/" class="text-decoration-none"><h1><img src="../assets/img/playroom/playroom36.png" alt="Playroom Icon"/> Playroom</h1></router-link>
 		<ul>
 			<li v-for="tool in this.$store.getters.tools" :key="tool.id">
 				<button
@@ -53,7 +53,6 @@ export default {
 	height: 100%;
 	min-height: 100%;
 	max-height: 100%;
-	padding-left: 20px;
 	background-color: $mainBackgroundColor;
 }
 
@@ -63,8 +62,10 @@ export default {
 }
 
 h1 {
+	margin: 0 20px 0 0;
+	padding: 20px 20px 20px 30px;
+	background-color: $primaryColorBackground;
 	font-size: 27pt;
-	margin: 20px;
 }
 
 ul {
