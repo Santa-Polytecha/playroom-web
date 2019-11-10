@@ -138,6 +138,9 @@ export const actions = {
 	onPlayersAdded(toolkit, payload) {
 		toolkit.commit("addPlayer", payload);
 	},
+	onPlayersRemoved(toolkit, payload) {
+		toolkit.commit("removePlayer", payload);
+	},
 	onMessagesChanged(toolkit, payload) {
 		toolkit.commit("setMessages", payload);
 	},
@@ -164,6 +167,9 @@ export const mutations = {
 	},
 	addPlayer(state, payload) {
 		state.players.push(payload);
+	},
+	removePlayer(state, payload) {
+		state.players = state.players.filter(item => item !== payload);
 	},
 	setMessages(state, payload) {
 		state.messages = payload;

@@ -28,11 +28,4 @@ export default {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-
-.fade-enter-active, .fade-leave-active {
-	transition: opacity .5s ease;
-}
-.fade-enter, .fade-leave-active {
-	opacity: 0;
-}
 </style>

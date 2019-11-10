@@ -28,3 +28,10 @@ input[type="text"]:focus {
 	background-color: darken($mainBackgroundColor, 7);
 	color: white;
 }
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+	opacity: 0;
+}

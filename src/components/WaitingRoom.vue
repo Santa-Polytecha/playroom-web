@@ -25,7 +25,11 @@
 			
 			<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
 				<ul class="list-unstyled">
-					<li v-for="player in players" :key="player.id"><p class="d-inline">{{player.name}}</p><p v-if="player.isRoomOwner" class="text-owner d-inline">owner</p><a @click="disconnect" v-if="player.isCurrentUser" class="d-inline remove-current-player"><i class="material-icons" title="Disconnect from this room">remove_circle</i></a></li>
+					<li v-for="player in players" :key="player.id">
+						<p class="d-inline">{{player.name}}</p>
+						<p v-if="player.isRoomOwner" class="text-owner d-inline">owner</p>
+						<a @click="disconnect(player)" v-if="player.isCurrentUser || currentPlayer.isRoomOwner" class="d-inline remove-current-player"><i class="material-icons" :title="getRemoveButtonTooltip(player)">remove_circle</i></a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -74,12 +78,27 @@ export default {
 		onGameClicked(id) {
 			this.currentGame = id;
 		},
+		getRemoveButtonTooltip(player) {
+			if (player.id === this.currentPlayer.id)
+				return "Disconnect from this room";
+			else if (this.currentPlayer.isRoomOwner)
+				return "Disconnect player from room";
+		},
 		play() {
+			// noinspection JSCheckFunctionSignatures
 			this.$router.push({name: "room", params: { id: this.roomId }})
 		},
-		disconnect() {
-			console.log(`Disconnecting ${this.currentPlayer.name}...`);
-			this.$router.push('/');
+		disconnect(player) {
+			// Disconnecting current player
+			if (player.id === this.currentPlayer.id) {
+				console.log(`Disconnecting yourself ${this.currentPlayer.name} from room ${this.roomId}...`);
+				this.$router.push('/');
+			}
+			// Disconnecting other player from the room
+			else if (this.currentPlayer.isRoomOwner) {
+				console.log(`Disconnecting player ${player.name} from room ${this.roomId}...`);
+				this.$store.dispatch("onPlayersRemoved", player);
+			}
 		},
 	},
 	computed: {
