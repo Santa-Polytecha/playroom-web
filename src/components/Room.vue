@@ -36,7 +36,7 @@ export default {
 			if (this.$route.params.hasOwnProperty("id"))
 				return this.$route.params.id;
 			else
-				return this.$store.getters.roomId;
+				return this.$store.getters.roomName;
 		},
 	},
 };
