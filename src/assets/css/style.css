@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Comfortaa:400,700|Montserrat|Raleway:300,400,700&display=swap");
-* {
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+*:not(.material-icons) {
   font-family: "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
 }
 
@@ -17,7 +18,7 @@ h1 {
   color: white;
 }
 
-input[type=text] {
+input[type=text], input[type=text]:focus, input[readonly], input:disabled {
   background-color: #26282c;
   color: white;
 }
@@ -25,6 +26,14 @@ input[type=text] {
 input[type=text]:focus {
   background-color: #26282c;
   color: white;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0;
 }
 
 /*# sourceMappingURL=style.css.map */

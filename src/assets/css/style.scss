@@ -2,7 +2,7 @@
 @import "metrics.scss";
 @import "fonts.scss";
 
-* {
+*:not(.material-icons) {
 	font-family: 'Raleway', 'Montserrat', Helvetica, Verdana, Arial, sans-serif, serif;
 }
 
@@ -20,11 +20,18 @@ h1 {
 	color: white;
 }
 
-input[type="text"] {
+input[type="text"], input[type="text"]:focus, input[readonly], input:disabled {
 	background-color: darken($mainBackgroundColor, 7);
 	color: white;
 }
 input[type="text"]:focus {
 	background-color: darken($mainBackgroundColor, 7);
 	color: white;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s ease;
+}
+.fade-enter, .fade-leave-active {
+	opacity: 0;
 }
