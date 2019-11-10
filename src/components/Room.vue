@@ -31,10 +31,18 @@ import CanvasContainer from "./CanvasContainer";
 export default {
 	name: "Room",
 	components: { CanvasContainer, ChatBox, Toolbar },
+	computed: {
+		roomId() {
+			if (this.$route.params.hasOwnProperty("id"))
+				return this.$route.params.id;
+			else
+				return this.$store.getters.roomName;
+		},
+	},
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .expand, .container, #room-container, #room-container > .row {
 	width: 100%;
 	max-width: 100%;

@@ -15,8 +15,7 @@ export default {
 
 <style lang="scss">
 @import "assets/css/bootstrap.css";
-@import "assets/css/style";
-@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+@import "assets/css/style.scss";
 
 #app {
 	width: 100%;
@@ -28,12 +27,5 @@ export default {
 	font-family: "Avenir", Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-.fade-enter-active, .fade-leave-active {
-	transition: opacity .5s ease;
-}
-.fade-enter, .fade-leave-active {
-	opacity: 0;
 }
 </style>

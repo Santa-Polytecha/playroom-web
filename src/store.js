@@ -1,6 +1,20 @@
 export const state = {
 	username: "",
 	roomName: "",
+	availableGames: [
+		{
+			id: 0,
+			name: "Game 1",
+		},
+		{
+			id: 1,
+			name: "Game 2",
+		},
+		{
+			id: 2,
+			name: "Game 3",
+		},
+	],
 	tools: [
 		{
 			id: 0,
@@ -28,6 +42,26 @@ export const state = {
 		},
 	],
 	currentTool: 0,
+	players: [
+		{
+			id: 0,
+			name: "Léa",
+			isRoomOwner: false,
+			isCurrentUser: false,
+		},
+		{
+			id: 1,
+			name: "Valentin",
+			isRoomOwner: false,
+			isCurrentUser: true,
+		},
+		{
+			id: 2,
+			name: "Antoine",
+			isRoomOwner: true,
+			isCurrentUser: false,
+		},
+	],
 	messages: [
 		{
 			id: 0,
@@ -68,11 +102,17 @@ export const getters = {
 	roomName(state) {
 		return state.roomName;
 	},
+	availableGames(state) {
+		return state.availableGames;
+	},
 	tools(state) {
 		return state.tools;
 	},
 	currentTool(state) {
 		return state.currentTool;
+	},
+	players(state) {
+		return state.players;
 	},
 	messages(state) {
 		return state.messages;
@@ -86,8 +126,20 @@ export const actions = {
 	onRoomNameChanged(toolkit, payload) {
 		toolkit.commit("setRoomName", payload);
 	},
+	onAvailableGamesChanged(toolkit, payload) {
+		toolkit.commit("setAvailableGames", payload);
+	},
 	onCurrentToolChanged(toolkit, payload) {
 		toolkit.commit("setCurrentTool", payload);
+	},
+	onPlayersChanged(toolkit, payload) {
+		toolkit.commit("setPlayers", payload);
+	},
+	onPlayersAdded(toolkit, payload) {
+		toolkit.commit("addPlayer", payload);
+	},
+	onPlayersRemoved(toolkit, payload) {
+		toolkit.commit("removePlayer", payload);
 	},
 	onMessagesChanged(toolkit, payload) {
 		toolkit.commit("setMessages", payload);
@@ -104,8 +156,20 @@ export const mutations = {
 	setRoomName(state, payload) {
 		state.roomName = payload;
 	},
+	setAvailableGames(state, payload) {
+		state.availableGames = payload;
+	},
 	setCurrentTool(state, payload) {
 		state.currentTool = payload;
+	},
+	setPlayers(state, payload) {
+		state.players = payload;
+	},
+	addPlayer(state, payload) {
+		state.players.push(payload);
+	},
+	removePlayer(state, payload) {
+		state.players = state.players.filter(item => item !== payload);
 	},
 	setMessages(state, payload) {
 		state.messages = payload;
