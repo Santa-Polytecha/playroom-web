@@ -17,7 +17,7 @@ h1 {
   color: white;
 }
 
-input[type=text] {
+input[type=text], input[type=text]:focus, input[readonly], input:disabled {
   background-color: #26282c;
   color: white;
 }

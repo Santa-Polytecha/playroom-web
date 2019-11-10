@@ -20,7 +20,7 @@ h1 {
 	color: white;
 }
 
-input[type="text"] {
+input[type="text"], input[type="text"]:focus, input[readonly], input:disabled {
 	background-color: darken($mainBackgroundColor, 7);
 	color: white;
 }

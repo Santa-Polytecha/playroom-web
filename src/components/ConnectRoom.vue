@@ -118,8 +118,8 @@ export default {
 				console.log("CreateRoom cannot be empty");
 		},
 		nextPage(id) {
-			this.$router.push("room/" + id)
-		}
+			this.$router.push({ name: "waiting-room", params: { id: id }})
+		},
 	},
 };
 </script>
