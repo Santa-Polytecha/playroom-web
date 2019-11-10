@@ -2,7 +2,7 @@
 @import "metrics.scss";
 @import "fonts.scss";
 
-* {
+*:not(.material-icons) {
 	font-family: 'Raleway', 'Montserrat', Helvetica, Verdana, Arial, sans-serif, serif;
 }
 

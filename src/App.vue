@@ -15,8 +15,7 @@ export default {
 
 <style lang="scss">
 @import "assets/css/bootstrap.css";
-@import "assets/css/style";
-@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+@import "assets/css/style.scss";
 
 #app {
 	width: 100%;
