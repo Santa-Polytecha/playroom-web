@@ -1,5 +1,6 @@
 export const state = {
 	username: "",
+	owner: false,
 	roomName: "",
 	tools: [
 		{
@@ -65,6 +66,9 @@ export const getters = {
 	username(state) {
 		return state.username;
 	},
+	owner(state) {
+		return state.owner;
+	},
 	roomName(state) {
 		return state.roomName;
 	},
@@ -83,6 +87,9 @@ export const actions = {
 	onUsernameChanged(toolkit, payload) {
 		toolkit.commit("setUsername", payload);
 	},
+	onOwnerChanged(toolkit, payload) {
+		toolkit.commit("setOwner", payload);
+	},
 	onRoomNameChanged(toolkit, payload) {
 		toolkit.commit("setRoomName", payload);
 	},
@@ -100,6 +107,9 @@ export const actions = {
 export const mutations = {
 	setUsername(state, payload) {
 		state.username = payload;
+	},
+	setOwner(state, payload) {
+		state.owner = payload;
 	},
 	setRoomName(state, payload) {
 		state.roomName = payload;

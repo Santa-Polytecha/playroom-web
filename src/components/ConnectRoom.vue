@@ -67,6 +67,20 @@ export default {
 			createRoom: '',
 		};
 	},
+	sockets: {
+		roomCreated: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomCreated", data)')
+		},
+		roomJoined: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomJoined", data)')
+		},
+		roomError: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
+		},
+		disconnect: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
+		}
+	},
 	methods: {
 		generateName(number = 1, ellipsis = true, sep = ' ') {
 			let content = '';
@@ -97,8 +111,11 @@ export default {
 				console.log(`Connecting ${this.username} in the room ${this.searchRoom}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
 				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
-				this.nextPage(this.searchRoom);
-			}
+				this.$socket.emit('joinRoom',  JSON.stringify({
+					user: this.$store.getters.username,
+					type: "create",
+					content: this.searchRoom,
+				}));			}
 			else if (this.username === '')
 				console.log("Username cannot be empty");
 			else if (this.searchRoom === '')
@@ -106,11 +123,13 @@ export default {
 		},
 		onCreateRoomClicked() {
 			if (this.username !== '') {
-				this.searchRoom = this.generateName(1, false, '-');
-				console.log(`Creating the room ${this.createRoom} for ${this.username}...`);
+				console.log(`Creating a room for ${this.username}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
-				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
-				this.nextPage(this.searchRoom);
+				this.$socket.emit('createRoom',  JSON.stringify({
+					user: this.$store.getters.username,
+					type: "create",
+					content: "",
+				}));
 			}
 			else if (this.username === '')
 				console.log("Username cannot be empty");
@@ -119,8 +138,30 @@ export default {
 		},
 		nextPage(id) {
 			this.$router.push("room/" + id)
-		}
+		},
 	},
+	created () {
+		this.$options.sockets.roomCreated = (data) => {
+			const message = JSON.parse(data);
+			this.$store.dispatch("onRoomNameChanged", message.content);
+			this.$store.dispatch("onOwnerChanged", true);
+			this.nextPage(message.content);
+		};
+		
+		this.$options.sockets.roomJoined = (data) => {
+			this.nextPage(this.searchRoom);
+		};
+		
+		this.$options.sockets.roomError = (data) => {
+			const message = JSON.parse(data);
+			//TODO error message
+			console.log(message.message)
+		};
+		
+		this.$options.sockets.disconnect = (data) => {
+			this.$router.replace('/');
+		}
+	}
 };
 </script>
 
