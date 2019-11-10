@@ -26,7 +26,7 @@
 			<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6">
 				<ul class="list-unstyled">
 					<li v-for="player in players" :key="player.id">
-						<p class="d-inline">{{player.name}}</p>
+						<p class="d-inline" :class="{'font-weight-bold': player.id === currentPlayer.id}">{{player.name}}</p>
 						<p v-if="player.isRoomOwner" class="text-owner d-inline">owner</p>
 						<a @click="disconnect(player)" v-if="player.isCurrentUser || currentPlayer.isRoomOwner" class="d-inline remove-current-player"><i class="material-icons" :title="getRemoveButtonTooltip(player)">remove_circle</i></a>
 					</li>
