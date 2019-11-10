@@ -52,7 +52,7 @@ export const state = {
 		{
 			id: 1,
 			name: "Valentin",
-			isRoomOwner: false,
+			isRoomOwner: true,
 			isCurrentUser: true,
 		},
 		{

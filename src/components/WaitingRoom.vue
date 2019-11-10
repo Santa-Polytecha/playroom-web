@@ -5,12 +5,12 @@
 		</div>
 		
 		<div class="row d-flex justify-content-center">
-			<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+			<div class="col-xl-6 col-lg-6 col-md-8 col-sm-12">
 				<div class="container">
 					<form class="row d-flex justify-content-center">
 						<label for="page-link" class="col-12">Link to this page:</label>
-						<input type="text" name="page-link" id="page-link" :value="this.$route.fullPath" readonly class="form-control col-10"/>
-						<input type="button" name="btn-copy-link" id="btn-copy-link" value="Copy Link" @click="copyLink" class="btn btn-primary col-2"/>
+						<input type="text" name="page-link" id="page-link" :value="this.$route.fullPath" readonly class="form-control col-xl-10 col-lg-9 col-md-9 col-sm-9"/>
+						<input type="button" name="btn-copy-link" id="btn-copy-link" value="Copy Link" @click="copyLink" class="btn btn-primary col-xl-2 col-lg-3 col-md-3 col-sm-3"/>
 					</form>
 				</div>
 			</div>
@@ -28,6 +28,10 @@
 					<li v-for="player in players" :key="player.id"><p class="d-inline">{{player.name}}</p><p v-if="player.isRoomOwner" class="text-owner d-inline">owner</p><a @click="disconnect" v-if="player.isCurrentUser" class="d-inline remove-current-player"><i class="material-icons" title="Disconnect from this room">remove_circle</i></a></li>
 				</ul>
 			</div>
+		</div>
+		
+		<div v-if="currentPlayer.isRoomOwner" class="row d-flex justify-content-center">
+			<button @click="play" class="btn btn-lg btn-primary col-xl-6 col-lg-6 col-md-6 col-sm-12">Play</button>
 		</div>
 	</div>
 </template>
@@ -70,8 +74,11 @@ export default {
 		onGameClicked(id) {
 			this.currentGame = id;
 		},
+		play() {
+			this.$router.push({name: "room", params: { id: this.roomId }})
+		},
 		disconnect() {
-			console.log(`Disconnecting ${this.currentPlayer}...`);
+			console.log(`Disconnecting ${this.currentPlayer.name}...`);
 			this.$router.push('/');
 		},
 	},
@@ -108,7 +115,7 @@ export default {
 			return list;
 		},
 		currentPlayer() {
-			return this.$store.getters.players.find(player => player.isCurrentUser).name;
+			return this.$store.getters.players.find(player => player.isCurrentUser);
 		},
 	},
 };
