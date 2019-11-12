@@ -118,12 +118,6 @@ export default {
 				this.usernameErrorVisibility = true;
 				error = true;
 			}
-			// TODO: Check server-side if username is unique
-			else if (this === null) {
-				this.usernameErrorMessage = "This username is already taken.";
-				this.usernameErrorVisibility = true;
-				error = true;
-			}
 			else
 				this.usernameErrorVisibility = false;
 			
@@ -206,7 +200,14 @@ export default {
 		
 		this.$options.sockets.roomError = (data) => {
 			const message = JSON.parse(data);
-			console.log(message.content)
+			const content = JSON.parse(message.content);
+			if(content.error === "user"){
+				this.usernameErrorMessage = content.message;
+				this.usernameErrorVisibility = true;
+			}else if(content.error === "room"){
+				this.searchRoomErrorMessage = content.message;
+				this.searchRoomErrorVisibility = true;
+			}
 		};
 	}
 };
