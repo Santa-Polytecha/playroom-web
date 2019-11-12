@@ -1,6 +1,9 @@
 <template>
 	<transition name="fade">
-		<p v-if="show" class="text-error text-danger">{{message}}</p>
+		<p v-if="show || occupySpace" class="text-error text-danger" :class="{'hide-text': !show && occupySpace}">
+			<span v-if="!show && occupySpace && (message === undefined || message === null || message === '')">Test</span>
+			<span v-else>{{message}}</span>
+		</p>
 	</transition>
 </template>
 
@@ -18,6 +21,11 @@ export default {
 			required: false,
 			default: false,
 		},
+		occupySpace: {
+			type: Boolean,
+			required: false,
+			default: true,
+		}
 	},
 };
 </script>
@@ -26,5 +34,11 @@ export default {
 
 .text-error {
 	font-size: 10pt;
+	transition: all .2s ease-in;
+	opacity: 1;
+}
+
+.hide-text {
+	opacity: 0;
 }
 </style>

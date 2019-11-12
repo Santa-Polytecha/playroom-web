@@ -22,7 +22,7 @@
 						<div class="col-12 container">
 							<form class="col-12 row">
 								<label for="username-text" class="col-12">Username</label>
-								<input type="text" class="form-control col-12" id="username-text" name="username-text" :placeholder="this.generateName(4)" v-model="username"/>
+								<input type="text" class="form-control col-12" id="username-text" name="username-text" :placeholder="this.usernamePlaceholder" v-model="username"/>
 								<TextError :message="usernameErrorMessage" :show="usernameErrorVisibility"/>
 							</form>
 						</div>
@@ -33,7 +33,7 @@
 						<div class="col-12 container">
 							<form class="col-12 row">
 								<label for="search-room-text" class="col-12">Search for a room</label>
-								<input type="text" class="form-control col-9" id="search-room-text" name="search-room-text" :placeholder="this.generateName(2, undefined, '-')" v-model="searchRoom"/>
+								<input type="text" class="form-control col-9" id="search-room-text" name="search-room-text" :placeholder="this.searchRoomPlaceholder" v-model="searchRoom"/>
 								<input type="button" class="btn btn-primary col-3" id="search-room-button" name="search-room-button" value="Connect" @click="onConnectRoomClicked"/>
 								<TextError :message="searchRoomErrorMessage" :show="searchRoomErrorVisibility"/>
 							</form>
@@ -68,11 +68,17 @@ export default {
 					"cookie"],
 			username: '',
 			searchRoom: '',
+			usernamePlaceholder: '',
+			searchRoomPlaceholder: '',
 			usernameErrorMessage: '',
 			usernameErrorVisibility: false,
 			searchRoomErrorMessage: '',
 			searchRoomErrorVisibility: false,
 		};
+	},
+	mounted() {
+		this.usernamePlaceholder = this.generateName(4);
+		this.searchRoomPlaceholder = this.generateName(2, undefined, '-');
 	},
 	methods: {
 		generateName(number = 1, ellipsis = true, sep = ' ') {
