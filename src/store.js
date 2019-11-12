@@ -1,7 +1,8 @@
 export const state = {
 	username: "",
-	owner: false,
+	owner: "",
 	roomName: "",
+	isAuthorized: true,
 	availableGames: [
 		{
 			id: 0,
@@ -43,26 +44,7 @@ export const state = {
 		},
 	],
 	currentTool: 0,
-	players: [
-		{
-			id: 0,
-			name: "Léa",
-			isRoomOwner: false,
-			isCurrentUser: false,
-		},
-		{
-			id: 1,
-			name: "Valentin",
-			isRoomOwner: false,
-			isCurrentUser: true,
-		},
-		{
-			id: 2,
-			name: "Antoine",
-			isRoomOwner: true,
-			isCurrentUser: false,
-		},
-	],
+	players: [],
 	messages: [
 		{
 			id: 0,
@@ -173,13 +155,27 @@ export const mutations = {
 		state.currentTool = payload;
 	},
 	setPlayers(state, payload) {
-		state.players = payload;
+		state.players = [];
+		payload.forEach( (payl) => {
+			const player = {
+				id: payl.socketId,
+				isRoomOwner: payl.name === state.owner,
+				isCurrentUser: payl.name === state.username,
+				name : payl.name
+			};
+			state.players.push(player);
+		});
 	},
 	addPlayer(state, payload) {
-		state.players.push(payload);
+		const player = {
+			isRoomOwner: payload === state.owner,
+			isCurrentUser: payload === state.username,
+			name : payload
+		};
+		state.players.push(player);
 	},
 	removePlayer(state, payload) {
-		state.players = state.players.filter(item => item !== payload);
+		state.players = state.players.filter(item => item.name !== payload);
 	},
 	setMessages(state, payload) {
 		state.messages = payload;

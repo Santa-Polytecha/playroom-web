@@ -34,7 +34,7 @@
 			</div>
 		</div>
 		
-		<div v-if="currentPlayer.isRoomOwner" class="row d-flex justify-content-center">
+		<div v-if="currentPlayer && currentPlayer.isRoomOwner" class="row d-flex justify-content-center">
 			<button @click="play" class="btn btn-lg btn-primary col-xl-6 col-lg-6 col-md-6 col-sm-12">Play</button>
 		</div>
 	</div>
@@ -47,6 +47,20 @@ export default {
 		return {
 			currentGame: 0,
 		};
+	},
+	sockets: {
+		userEnter: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomCreated", data)')
+		},
+		userLeave: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomJoined", data)')
+		},
+		roomError: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
+		},
+		redirect: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("redirect", data)')
+		}
 	},
 	methods: {
 		copyLink() {
@@ -92,14 +106,30 @@ export default {
 			// Disconnecting current player
 			if (player.id === this.currentPlayer.id) {
 				console.log(`Disconnecting yourself ${this.currentPlayer.name} from room ${this.roomId}...`);
+				this.$store.dispatch("onPlayersRemoved", player.name);
+				this.leaveRoom(player);
+				this.resetRoom();
 				this.$router.push('/');
 			}
 			// Disconnecting other player from the room
 			else if (this.currentPlayer.isRoomOwner) {
 				console.log(`Disconnecting player ${player.name} from room ${this.roomId}...`);
-				this.$store.dispatch("onPlayersRemoved", player);
+				this.$store.dispatch("onPlayersRemoved", player.name);
+				this.leaveRoom(player);
 			}
 		},
+		resetRoom(){
+			this.$store.dispatch("onRoomNameChanged", "");
+			this.$store.dispatch("onOwnerChanged", "");
+			this.$store.dispatch("onUsernameChanged", "");
+		},
+		leaveRoom(player){
+			this.$socket.emit('userLeave',  JSON.stringify({
+				user: player.name,
+				type: "userLeave",
+				content: "",
+			}));
+		}
 	},
 	computed: {
 		roomId() {
@@ -112,6 +142,9 @@ export default {
 			return this.$store.getters.availableGames;
 		},
 		players() {
+			if (this.$store.getters.players.length === 0)
+				return;
+			
 			// Copy the players list
 			let list = [...this.$store.getters.players];
 			
@@ -137,6 +170,53 @@ export default {
 			return this.$store.getters.players.find(player => player.isCurrentUser);
 		},
 	},
+	created () {
+		if(this.$store.getters.players.length === 0 || this.$store.getters.owner.length === 0
+			|| this.$store.getters.username === 0) { //room is incomplete go back to lobby
+			this.resetRoom();
+			this.$router.push('/');
+		}
+		if(this.$store.getters.username.length > 0){
+			this.$socket.emit("checkAuth", JSON.stringify({
+				user: this.$store.getters.username,
+				type: "checkAuth",
+				content: this.$socket.id,
+			}), (result) => {
+				if(!result){
+					this.resetRoom();
+					this.$router.push('/');
+				}
+			});
+		}
+		
+		this.$options.sockets.userEnter = (data) => {
+			const message = JSON.parse(data);
+			this.$store.dispatch("onPlayersChanged", message.content);
+			console.log(this.$store.getters.players)
+		};
+		
+		this.$options.sockets.userLeave = (data) => {
+			const message = JSON.parse(data);
+			this.$store.dispatch("onPlayersChanged", message.content);
+			console.log(this.$store.getters.players)
+		};
+		
+		this.$options.sockets.roomError = (data) => {
+			const message = JSON.parse(data);
+			//TODO error message
+			console.log(message.content)
+		};
+		
+		this.$options.sockets.disconnect = (data) => {
+			this.$router.replace('/');
+		};
+		
+		this.$options.sockets.redirect = (data) => {
+			const message = JSON.parse(data);
+			if(message.user === this.$store.getters.username)
+				this.$router.replace('/');
+		}
+	}
 };
 </script>
 

@@ -77,8 +77,8 @@ export default {
 		roomError: function (data) {
 			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
 		},
-		disconnect: function (data) {
-			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
+		redirect: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("redirect", data)')
 		}
 	},
 	methods: {
@@ -139,28 +139,50 @@ export default {
 		nextPage(id) {
 			this.$router.push({ name: "waiting-room", params: { id: id }})
 		},
+		reset(){
+			this.$store.dispatch("onRoomNameChanged", "");
+			this.$store.dispatch("onOwnerChanged", "");
+			this.$store.dispatch("onPlayersChanged", []);
+		},
+		changePlayers(players){
+			this.$store.dispatch("onPlayersChanged", players);
+			if(this.$store.getters.players.length === 0)
+				this.$router.replace("/")
+		}
 	},
 	created () {
+		//if user come back to this page he leaves game room
+		if(this.$store.getters.username.length > 0){
+			this.$socket.emit("leaveRoom", JSON.stringify({
+				user: this.$store.getters.username,
+				type: "leaveRoom",
+				content: this.$socket.id,
+			}));
+			this.reset();
+		}
+		
 		this.$options.sockets.roomCreated = (data) => {
 			const message = JSON.parse(data);
-			this.$store.dispatch("onRoomNameChanged", message.content);
-			this.$store.dispatch("onOwnerChanged", true);
-			this.nextPage(message.content);
+			this.$store.dispatch("onRoomNameChanged", message.room);
+			this.$store.dispatch("onOwnerChanged", message.user);
+			this.$store.dispatch("onPlayersChanged", message.content);
+			this.nextPage(message.room);
 		};
 		
 		this.$options.sockets.roomJoined = (data) => {
-			this.nextPage(this.searchRoom);
+			const message = JSON.parse(data);
+			const content = JSON.parse(message.content);
+			console.log(message);
+			this.$store.dispatch("onRoomNameChanged", content.name);
+			this.$store.dispatch("onOwnerChanged", content.owner);
+			this.changePlayers(content.users)
+			this.nextPage(content.name);
 		};
 		
 		this.$options.sockets.roomError = (data) => {
 			const message = JSON.parse(data);
-			//TODO error message
-			console.log(message.message)
+			console.log(message.content)
 		};
-		
-		this.$options.sockets.disconnect = (data) => {
-			this.$router.replace('/');
-		}
 	}
 };
 </script>

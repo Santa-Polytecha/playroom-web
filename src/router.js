@@ -12,16 +12,19 @@ export const routes = [
 		path: "/waiting-room/:id",
 		name: "waiting-room",
 		component: WaitingRoom,
+		meta: { auth: true }
 	},
 	{
 		path: "/wait-room/:id",
 		name: "wait-room",
 		redirect: "/waiting-room/:id",
+		meta: { auth: true }
 	},
 	{
 		path: "/room/:id",
 		name: "room",
 		component: Room,
+		meta: { auth: true }
 	},
 	{
 		path: "*",
