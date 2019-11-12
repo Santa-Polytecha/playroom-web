@@ -22,7 +22,8 @@
 						<div class="col-12 container">
 							<form class="col-12 row">
 								<label for="username-text" class="col-12">Username</label>
-								<input type="text" class="form-control col-12" id="username-text" name="username-text" :placeholder="this.generateName(4)" @input="onUsernameChanged"/>
+								<input type="text" class="form-control col-12" id="username-text" name="username-text" :placeholder="this.usernamePlaceholder" v-model="username"/>
+								<TextError :message="usernameErrorMessage" :show="usernameErrorVisibility"/>
 							</form>
 						</div>
 					</div>
@@ -32,8 +33,9 @@
 						<div class="col-12 container">
 							<form class="col-12 row">
 								<label for="search-room-text" class="col-12">Search for a room</label>
-								<input type="text" class="form-control col-9" id="search-room-text" name="search-room-text" :placeholder="this.generateName(2, undefined, '-')" @input="onSearchRoomChanged"/>
+								<input type="text" class="form-control col-9" id="search-room-text" name="search-room-text" :placeholder="this.searchRoomPlaceholder" v-model="searchRoom"/>
 								<input type="button" class="btn btn-primary col-3" id="search-room-button" name="search-room-button" value="Connect" @click="onConnectRoomClicked"/>
+								<TextError :message="searchRoomErrorMessage" :show="searchRoomErrorVisibility"/>
 							</form>
 						</div>
 					</div>
@@ -53,8 +55,10 @@
 </template>
 
 <script>
+import TextError from "./TextError";
 export default {
 	name: "ConnectRoom",
+	components: { TextError },
 	data() {
 		return {
 			adjectives: ["little", "sweet", "fluffy", "squared", "cubic", "smiling", "jumping", "cute", "supportive",
@@ -64,7 +68,12 @@ export default {
 					"cookie"],
 			username: '',
 			searchRoom: '',
-			createRoom: '',
+			usernamePlaceholder: '',
+			searchRoomPlaceholder: '',
+			usernameErrorMessage: '',
+			usernameErrorVisibility: false,
+			searchRoomErrorMessage: '',
+			searchRoomErrorVisibility: false,
 		};
 	},
 	sockets: {
@@ -80,6 +89,10 @@ export default {
 		redirect: function (data) {
 			console.log('this method was fired by the socket server. eg: io.emit("redirect", data)')
 		}
+	},
+	mounted() {
+		this.usernamePlaceholder = this.generateName(4);
+		this.searchRoomPlaceholder = this.generateName(2, undefined, '-');
 	},
 	methods: {
 		generateName(number = 1, ellipsis = true, sep = ' ') {
@@ -97,17 +110,37 @@ export default {
 			
 			return content;
 		},
-		onUsernameChanged(event) {
-			this.username = event.target.value;
-		},
-		onSearchRoomChanged(event) {
-			this.searchRoom = event.target.value;
-		},
-		onCreateRoomChanged(event) {
-			this.createRoom = event.target.value;
+		checkFields(checkSearchRoom = true) {
+			let error = false;
+			
+			if (this.username === undefined || this.username === null || this.username === '') {
+				this.usernameErrorMessage = "A username is required.";
+				this.usernameErrorVisibility = true;
+				error = true;
+			}
+			// TODO: Check server-side if username is unique
+			else if (this === null) {
+				this.usernameErrorMessage = "This username is already taken.";
+				this.usernameErrorVisibility = true;
+				error = true;
+			}
+			else
+				this.usernameErrorVisibility = false;
+			
+			if (checkSearchRoom) {
+				if (this.searchRoom === undefined || this.searchRoom === null || this.searchRoom === '') {
+					this.searchRoomErrorMessage = "A room name is required.";
+					this.searchRoomErrorVisibility = true;
+					error = true;
+				}
+				else
+					this.searchRoomErrorVisibility = false;
+			}
+			
+			return !error;
 		},
 		onConnectRoomClicked() {
-			if (this.username !== '' && this.searchRoom !== '') {
+			if (this.checkFields()) {
 				console.log(`Connecting ${this.username} in the room ${this.searchRoom}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
 				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
@@ -116,13 +149,9 @@ export default {
 					type: "create",
 					content: this.searchRoom,
 				}));			}
-			else if (this.username === '')
-				console.log("Username cannot be empty");
-			else if (this.searchRoom === '')
-				console.log("SearchRoom cannot be empty");
 		},
 		onCreateRoomClicked() {
-			if (this.username !== '') {
+			if (this.checkFields(false)) {
 				console.log(`Creating a room for ${this.username}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
 				this.$socket.emit('createRoom',  JSON.stringify({
@@ -131,10 +160,6 @@ export default {
 					content: "",
 				}));
 			}
-			else if (this.username === '')
-				console.log("Username cannot be empty");
-			else if (this.createRoom === '')
-				console.log("CreateRoom cannot be empty");
 		},
 		nextPage(id) {
 			this.$router.push({ name: "waiting-room", params: { id: id }})
