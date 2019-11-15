@@ -10,10 +10,10 @@
 					</div>
 					
 					<div id="banner-placeholder" class="row" ref="banner-placeholder">
-						<img src="../assets/img/banner/room1.png" ref="room1" id="room1"/>
-						<img src="../assets/img/banner/room2.png" ref="room2" id="room2"/>
-						<img src="../assets/img/banner/room4.png" ref="room4" id="room4"/>
-						<img src="../assets/img/banner/room3.png" ref="room3" id="room3"/>
+						<img src="../assets/img/banner/room1.png" ref="room1" id="room1" class="room" :style="'transition-duration: ' + animationDuration[0] + 's !important;'"/>
+						<img src="../assets/img/banner/room2.png" ref="room2" id="room2" class="room" :style="'transition-duration: ' + animationDuration[1] + 's !important;'"/>
+						<img src="../assets/img/banner/room4.png" ref="room4" id="room4" class="room" :style="'transition-duration: ' + animationDuration[2] + 's !important;'"/>
+						<img src="../assets/img/banner/room3.png" ref="room3" id="room3" class="room" :style="'transition-duration: ' + animationDuration[3] + 's !important;'"/>
 					</div>
 				</div>
 			</div>
@@ -59,6 +59,7 @@
 
 <script>
 import TextError from "./TextError";
+
 export default {
 	name: "ConnectRoom",
 	components: { TextError },
@@ -79,6 +80,11 @@ export default {
 			searchRoomErrorVisibility: false,
 			initialBannerY: 0,
 			bannerOffsetY: 0,
+			areRoomsAnimationsInitialized: false,
+			intervalsRooms: [undefined, undefined, undefined, undefined],
+			animationGoingDown: [true, false, false, true],
+			animationMagnitude: [10, 12, 16, 10],
+			animationDuration: [1.2, 1, 1, .8],
 		};
 	},
 	mounted() {
@@ -153,6 +159,20 @@ export default {
 			posImg(room2, 400, 0);
 			posImg(room3, 300, 230);
 			posImg(room4, -150, 320);
+			
+			// Add animation
+			if (!this.areRoomsAnimationsInitialized) {
+				rooms.forEach((room, index) => {
+					this.intervalsRooms[index] = setInterval(() => {
+						if (this.animationGoingDown[index])
+							room.style.top = room.getBoundingClientRect().y + this.animationMagnitude[index] + "px";
+						else
+							room.style.top = room.getBoundingClientRect().y - this.animationMagnitude[index] + "px";
+						this.animationGoingDown[index] = !this.animationGoingDown[index];
+					}, this.animationDuration[index] * 1000)
+				});
+				this.areRoomsAnimationsInitialized = true;
+			}
 		},
 		generateName(number = 1, ellipsis = true, sep = ' ') {
 			let content = '';
@@ -326,5 +346,9 @@ hr {
 	img {
 		max-width: 100%;
 	}
+}
+
+.room {
+	transition: all 1s ease;
 }
 </style>
