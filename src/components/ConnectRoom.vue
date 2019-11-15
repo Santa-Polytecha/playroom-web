@@ -2,15 +2,18 @@
 	<div class="container" id="connect-room">
 		<div class="row">
 			<div class="col-xl-6 col-lg-6  col-md-6 col-sm-12 first-row">
-				<div class="container">
+				<div class="container d-flex flex-column">
 					<div class="row" id="title-row">
 						<h1 class="col-12">Playroom</h1>
 						<br/>
 						<p class="lead col-12">Play with your friends in a private & friendly space</p>
 					</div>
 					
-					<div class="row flex-column align-items-center">
-						<img src="../assets/img/playroom/playroom1024.png" alt="Playroom Icon" class="col-8"/>
+					<div id="banner-placeholder" class="row flex-grow-1" ref="banner-placeholder">
+						<img src="../assets/img/banner/room1.png" ref="room1" id="room1"/>
+						<img src="../assets/img/banner/room2.png" ref="room2" id="room2"/>
+						<img src="../assets/img/banner/room4.png" ref="room4" id="room4"/>
+						<img src="../assets/img/banner/room3.png" ref="room3" id="room3"/>
 					</div>
 				</div>
 			</div>
@@ -79,8 +82,64 @@ export default {
 	mounted() {
 		this.usernamePlaceholder = this.generateName(4);
 		this.searchRoomPlaceholder = this.generateName(2, undefined, '-');
+		
+		// Place banner images
+		document.onreadystatechange = () => {
+			this.placeBanner();
+			window.addEventListener("resize", this.placeBanner);
+		};
 	},
 	methods: {
+		placeBanner() {
+			const resizeImg = (img, width = null, height = null) => {
+				let oldWidth = img.getBoundingClientRect().width;
+				let oldHeight = img.getBoundingClientRect().height;
+				if (width != null && height == null) {
+					height = width * oldHeight/oldWidth;
+				}
+				else if (width == null && height != null) {
+					width = height * oldWidth/oldHeight;
+				}
+				else if (width == null && height == null)
+					return;
+				img.style.width = width + "px";
+				img.style.height = height + "px";
+			};
+			
+			let bannerPlaceholder = this.$refs["banner-placeholder"];
+			
+			let bannerX = bannerPlaceholder.getBoundingClientRect().x;
+			let bannerY = bannerPlaceholder.getBoundingClientRect().y;
+			let bannerWidth = bannerPlaceholder.getBoundingClientRect().width;
+			let bannerHeight = bannerPlaceholder.getBoundingClientRect().height;
+			
+			const posImg = (img, x, y) => {
+				img.style.position = "absolute";
+				img.style.left = Math.abs(bannerX - x) + "px";
+				img.style.top = Math.abs(bannerY - y) + "px";
+			};
+			
+			let room1 = this.$refs["room1"];
+			let room2 = this.$refs["room2"];
+			let room3 = this.$refs["room3"];
+			let room4 = this.$refs["room4"];
+			
+			room1.style.zIndex = 1;
+			room2.style.zIndex = 2;
+			room3.style.zIndex = 3;
+			room4.style.zIndex = 4;
+			
+			console.log("bannerWidth = ", bannerWidth);
+			resizeImg(room1, bannerWidth/2.5);
+			resizeImg(room2, bannerWidth/2.2);
+			resizeImg(room3, bannerWidth/2.25);
+			resizeImg(room4, bannerWidth/1.2);
+			
+			posImg(room1, 0, -100);
+			posImg(room2, 400, 0);
+			posImg(room3, 300, 500);
+			posImg(room4, 0, 600);
+		},
 		generateName(number = 1, ellipsis = true, sep = ' ') {
 			let content = '';
 			for (let i = 0; i < number; i++) {
@@ -152,6 +211,31 @@ export default {
 <style scoped lang="scss">
 @import "../assets/css/style.scss";
 
+// SM
+@media (min-width:576px) {
+	#connect-room {
+		overflow: visible;
+	}
+}
+// MD
+@media (min-width:768px) {
+	#connect-room {
+		overflow: hidden;
+	}
+}
+// LG
+@media (min-width:992px) {
+	#connect-room {
+		overflow: hidden;
+	}
+}
+// XL
+@media (min-width:1200px) {
+	#connect-room {
+		overflow: hidden;
+	}
+}
+
 #connect-room {
 	width: 100%;
 	min-width: 100%;
@@ -163,6 +247,10 @@ export default {
 	.row {
 		height: 100%;
 		margin: 0;
+		.container {
+			min-height: 100%;
+			max-height: 100%;
+		}
 	}
 	.row > div {
 		padding: 20px 0;
@@ -215,5 +303,24 @@ hr {
 
 #search-room-button {
 	border-radius: 0 $border-radius $border-radius 0;
+}
+
+#banner-placeholder {
+	width: 100%;
+	min-width: 100%;
+	max-width: 100%;
+	height: 100%;
+	min-height: 100%;
+	max-height: 100%;
+	img {
+		//display: block;
+		max-width: 100%;
+		max-height: 100%;
+		//width: auto;
+		//height: auto;
+	}
+}
+
+.room {
 }
 </style>
