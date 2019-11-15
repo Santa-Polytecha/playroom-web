@@ -2,14 +2,14 @@
 	<div class="container" id="connect-room">
 		<div class="row">
 			<div class="col-xl-6 col-lg-6  col-md-6 col-sm-12 first-row">
-				<div class="container d-flex flex-column">
+				<div class="container d-flex flex-column justify-content-around">
 					<div class="row" id="title-row">
 						<h1 class="col-12">Playroom</h1>
 						<br/>
 						<p class="lead col-12">Play with your friends in a private & friendly space</p>
 					</div>
 					
-					<div id="banner-placeholder" class="row flex-grow-1" ref="banner-placeholder">
+					<div id="banner-placeholder" class="row" ref="banner-placeholder">
 						<img src="../assets/img/banner/room1.png" ref="room1" id="room1"/>
 						<img src="../assets/img/banner/room2.png" ref="room2" id="room2"/>
 						<img src="../assets/img/banner/room4.png" ref="room4" id="room4"/>
@@ -77,6 +77,7 @@ export default {
 			usernameErrorVisibility: false,
 			searchRoomErrorMessage: '',
 			searchRoomErrorVisibility: false,
+			initialBannerY: 0,
 		};
 	},
 	mounted() {
@@ -84,22 +85,21 @@ export default {
 		this.searchRoomPlaceholder = this.generateName(2, undefined, '-');
 		
 		// Place banner images
-		document.onreadystatechange = () => {
-			this.placeBanner();
-			window.addEventListener("resize", this.placeBanner);
-		};
+		window.addEventListener("resize", this.placeBanner);
+		window.addEventListener("load", this.placeBanner);
+		window.addEventListener("fullscreenchange", this.placeBanner);
+		window.addEventListener("fullscreenerror", this.placeBanner);
+		this.$refs["banner-placeholder"].addEventListener("resize", this.placeBanner);
 	},
 	methods: {
 		placeBanner() {
-			const resizeImg = (img, width = null, height = null) => {
-				let oldWidth = img.getBoundingClientRect().width;
-				let oldHeight = img.getBoundingClientRect().height;
-				if (width != null && height == null) {
+			const resizeImg = (img, width = null, height = null, originalWidth = null, originalHeight = null) => {
+				let oldWidth = originalWidth !== null && originalWidth !== undefined ? originalWidth : img.getBoundingClientRect().width;
+				let oldHeight = originalHeight !== null && originalHeight !== undefined ? originalHeight : img.getBoundingClientRect().height;
+				if (width != null && height == null)
 					height = width * oldHeight/oldWidth;
-				}
-				else if (width == null && height != null) {
+				else if (width == null && height != null)
 					width = height * oldWidth/oldHeight;
-				}
 				else if (width == null && height == null)
 					return;
 				img.style.width = width + "px";
@@ -111,34 +111,46 @@ export default {
 			let bannerX = bannerPlaceholder.getBoundingClientRect().x;
 			let bannerY = bannerPlaceholder.getBoundingClientRect().y;
 			let bannerWidth = bannerPlaceholder.getBoundingClientRect().width;
+			
+			if (this.initialBannerY <= 0)
+				this.initialBannerY = bannerY;
+			else {
+				bannerPlaceholder.style = this.initialBannerY + "px";
+				bannerY = this.initialBannerY;
+			}
+			
+			// Resize banner height according to width
+			bannerPlaceholder.style.height = bannerWidth + "px";
+			
+			// Recompute
 			let bannerHeight = bannerPlaceholder.getBoundingClientRect().height;
+			
+			console.log("banner position = ", [bannerX, bannerY]);
+			console.log("banner width x height = ", [bannerWidth, bannerHeight]);
 			
 			const posImg = (img, x, y) => {
 				img.style.position = "absolute";
-				img.style.left = Math.abs(bannerX - x) + "px";
-				img.style.top = Math.abs(bannerY - y) + "px";
+				img.style.left = (bannerX + x) * (bannerWidth / 718) + "px";
+				img.style.top = (2 * bannerY + y) * (bannerWidth / 718) + "px";
 			};
 			
 			let room1 = this.$refs["room1"];
 			let room2 = this.$refs["room2"];
 			let room3 = this.$refs["room3"];
 			let room4 = this.$refs["room4"];
+			let rooms = [room1, room2, room3, room4];
 			
-			room1.style.zIndex = 1;
-			room2.style.zIndex = 2;
-			room3.style.zIndex = 3;
-			room4.style.zIndex = 4;
+			rooms.forEach((room, index) => room.style.zIndex = index);
 			
-			console.log("bannerWidth = ", bannerWidth);
-			resizeImg(room1, bannerWidth/2.5);
-			resizeImg(room2, bannerWidth/2.2);
-			resizeImg(room3, bannerWidth/2.25);
-			resizeImg(room4, bannerWidth/1.2);
+			resizeImg(room1, bannerWidth / 2.5, null, 1024, 1024);
+			resizeImg(room2, bannerWidth / 2.2, null, 1024, 1097);
+			resizeImg(room3, bannerWidth / 2.25, null, 1024, 812);
+			resizeImg(room4, bannerWidth / 1.2, null, 1024, 602);
 			
-			posImg(room1, 0, -100);
+			posImg(room1, 0, 50);
 			posImg(room2, 400, 0);
-			posImg(room3, 300, 500);
-			posImg(room4, 0, 600);
+			posImg(room3, 300, 230);
+			posImg(room4, -150, 320);
 		},
 		generateName(number = 1, ellipsis = true, sep = ' ') {
 			let content = '';
@@ -309,18 +321,8 @@ hr {
 	width: 100%;
 	min-width: 100%;
 	max-width: 100%;
-	height: 100%;
-	min-height: 100%;
-	max-height: 100%;
 	img {
-		//display: block;
 		max-width: 100%;
-		max-height: 100%;
-		//width: auto;
-		//height: auto;
 	}
-}
-
-.room {
 }
 </style>
