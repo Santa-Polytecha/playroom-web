@@ -50,16 +50,13 @@ export default {
 	},
 	sockets: {
 		userEnter: function (data) {
-			console.log('this method was fired by the socket server. eg: io.emit("roomCreated", data)')
+			console.log('this method was fired by the socket server. eg: io.emit("userEnter", data)')
 		},
 		userLeave: function (data) {
-			console.log('this method was fired by the socket server. eg: io.emit("roomJoined", data)')
+			console.log('this method was fired by the socket server. eg: io.emit("userLeave", data)')
 		},
 		roomError: function (data) {
 			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
-		},
-		redirect: function (data) {
-			console.log('this method was fired by the socket server. eg: io.emit("redirect", data)')
 		}
 	},
 	methods: {
@@ -106,16 +103,16 @@ export default {
 			// Disconnecting current player
 			if (player.id === this.currentPlayer.id) {
 				console.log(`Disconnecting yourself ${this.currentPlayer.name} from room ${this.roomId}...`);
-				this.$store.dispatch("onPlayersRemoved", player.name);
 				this.leaveRoom(player);
 				this.resetRoom();
+				this.$store.dispatch("onPlayersRemoved", player.name);
 				this.$router.push('/');
 			}
 			// Disconnecting other player from the room
 			else if (this.currentPlayer.isRoomOwner) {
 				console.log(`Disconnecting player ${player.name} from room ${this.roomId}...`);
-				this.$store.dispatch("onPlayersRemoved", player.name);
 				this.leaveRoom(player);
+				this.$store.dispatch("onPlayersRemoved", player.name);
 			}
 		},
 		resetRoom(){
@@ -123,12 +120,21 @@ export default {
 			this.$store.dispatch("onOwnerChanged", "");
 			this.$store.dispatch("onUsernameChanged", "");
 		},
+		changePlayers(players){
+			this.$store.dispatch("onPlayersChanged", players);
+			if(this.$store.getters.players.length === 0)
+				this.$router.replace("/")
+		},
 		leaveRoom(player){
-			this.$socket.emit('userLeave',  JSON.stringify({
+			console.log("DISCONNECTING")
+			const jsonStringMessage =  JSON.stringify({
 				user: player.name,
 				type: "userLeave",
-				content: "",
-			}));
+				room: this.$store.getters.roomName,
+				content: player,
+			});
+			console.log(jsonStringMessage);
+			this.$socket.emit('userLeave', jsonStringMessage);
 		}
 	},
 	computed: {
@@ -191,18 +197,24 @@ export default {
 		
 		this.$options.sockets.userEnter = (data) => {
 			const message = JSON.parse(data);
+			if(message.room !== this.$store.getters.roomName)
+				return;
 			this.$store.dispatch("onPlayersChanged", message.content);
 			console.log(this.$store.getters.players)
 		};
 		
 		this.$options.sockets.userLeave = (data) => {
 			const message = JSON.parse(data);
-			this.$store.dispatch("onPlayersChanged", message.content);
+			if(message.room !== this.$store.getters.roomName)
+				return;
+			this.changePlayers(message.content);
 			console.log(this.$store.getters.players)
 		};
 		
 		this.$options.sockets.roomError = (data) => {
 			const message = JSON.parse(data);
+			if(message.room !== this.$store.getters.roomName)
+				return;
 			//TODO error message
 			console.log(message.content)
 		};
@@ -210,12 +222,6 @@ export default {
 		this.$options.sockets.disconnect = (data) => {
 			this.$router.replace('/');
 		};
-		
-		this.$options.sockets.redirect = (data) => {
-			const message = JSON.parse(data);
-			if(message.user === this.$store.getters.username)
-				this.$router.replace('/');
-		}
 	}
 };
 </script>

@@ -142,7 +142,8 @@ export default {
 					user: this.$store.getters.username,
 					type: "create",
 					content: this.searchRoom,
-				}));			}
+				}));
+			}
 		},
 		onCreateRoomClicked() {
 			if (this.checkFields(false)) {
@@ -172,9 +173,9 @@ export default {
 	created () {
 		//if user come back to this page he leaves game room
 		if(this.$store.getters.username.length > 0){
-			this.$socket.emit("leaveRoom", JSON.stringify({
+			this.$socket.emit("userLeave", JSON.stringify({
 				user: this.$store.getters.username,
-				type: "leaveRoom",
+				type: "userLeave",
 				content: this.$socket.id,
 			}));
 			this.reset();
@@ -194,7 +195,7 @@ export default {
 			console.log(message);
 			this.$store.dispatch("onRoomNameChanged", content.name);
 			this.$store.dispatch("onOwnerChanged", content.owner);
-			this.changePlayers(content.users)
+			this.changePlayers(content.users);
 			this.nextPage(content.name);
 		};
 		
