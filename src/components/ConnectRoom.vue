@@ -19,7 +19,7 @@
 			</div>
 			
 			<div class="col-xl-6 col-lg-6  col-md-6 col-sm-12 second-row">
-				<div class="container">
+				<div class="container d-flex flex-column justify-content-center">
 					
 					<div class="row">
 						<div class="col-12 container">
@@ -295,6 +295,11 @@ export default {
 	.first-row {
 		background-color: $primaryColorBackground;
 	}
+	.second-row {
+		height: 100%;
+		min-height: 100%;
+		max-height: 100%;
+	}
 	.first-row, .second-row {
 		display: flex;
 		align-items: center;
@@ -307,7 +312,7 @@ h1, h2, h3, h4, h5, h6, p {
 
 h1 {
 	font-size: 40pt;
-	font-family: "Comfortaa", "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif;
+	font-family: "Comfortaa", "Raleway", "Montserrat", Helvetica, Verdana, Arial, sans-serif, serif !important;
 	font-weight: bold;
 	color: white;
 }
