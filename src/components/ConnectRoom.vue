@@ -78,6 +78,7 @@ export default {
 			searchRoomErrorMessage: '',
 			searchRoomErrorVisibility: false,
 			initialBannerY: 0,
+			bannerOffsetY: 0,
 		};
 	},
 	mounted() {
@@ -111,6 +112,7 @@ export default {
 			let bannerX = bannerPlaceholder.getBoundingClientRect().x;
 			let bannerY = bannerPlaceholder.getBoundingClientRect().y;
 			let bannerWidth = bannerPlaceholder.getBoundingClientRect().width;
+			let bannerHeight = bannerPlaceholder.getBoundingClientRect().height;
 			
 			if (this.initialBannerY <= 0)
 				this.initialBannerY = bannerY;
@@ -123,15 +125,15 @@ export default {
 			bannerPlaceholder.style.height = bannerWidth + "px";
 			
 			// Recompute
-			let bannerHeight = bannerPlaceholder.getBoundingClientRect().height;
-			
-			console.log("banner position = ", [bannerX, bannerY]);
-			console.log("banner width x height = ", [bannerWidth, bannerHeight]);
+			bannerHeight = bannerPlaceholder.getBoundingClientRect().height;
 			
 			const posImg = (img, x, y) => {
 				img.style.position = "absolute";
 				img.style.left = (bannerX + x) * (bannerWidth / 718) + "px";
-				img.style.top = (2 * bannerY + y) * (bannerWidth / 718) + "px";
+				let top = (bannerY + y) * (bannerWidth / 718);
+				if (top < bannerY)
+					this.bannerOffsetY = bannerY - top;
+				img.style.top = (top + this.bannerOffsetY) + "px"
 			};
 			
 			let room1 = this.$refs["room1"];
