@@ -80,11 +80,12 @@ export default {
 			searchRoomErrorVisibility: false,
 			initialBannerY: 0,
 			bannerOffsetY: 0,
+			computedRoomsPosition: [[0, 0], [0, 0], [0, 0], [0, 0]],
 			areRoomsAnimationsInitialized: false,
 			intervalsRooms: [undefined, undefined, undefined, undefined],
 			animationGoingDown: [true, false, false, true],
-			animationMagnitude: [10, 12, 16, 10],
-			animationDuration: [1.2, 1, 1, .8],
+			animationMagnitude: [6, 10, 8, 12],
+			animationDuration: [1.2, 1, 1.2, .8],
 		};
 	},
 	mounted() {
@@ -133,15 +134,6 @@ export default {
 			// Recompute
 			bannerHeight = bannerPlaceholder.getBoundingClientRect().height;
 			
-			const posImg = (img, x, y) => {
-				img.style.position = "absolute";
-				img.style.left = (bannerX + x) * (bannerWidth / 718) + "px";
-				let top = (bannerY + y) * (bannerWidth / 718);
-				if (top < bannerY)
-					this.bannerOffsetY = bannerY - top;
-				img.style.top = (top + this.bannerOffsetY) + "px"
-			};
-			
 			let room1 = this.$refs["room1"];
 			let room2 = this.$refs["room2"];
 			let room3 = this.$refs["room3"];
@@ -150,24 +142,35 @@ export default {
 			
 			rooms.forEach((room, index) => room.style.zIndex = index);
 			
+			const posImg = (img, x, y, animationMagnitude = 0) => {
+				img.style.position = "absolute";
+				let left = (bannerX + x) * (bannerWidth / 718) + "px";
+				img.style.left = left;
+				let top = (bannerY + y) * (bannerWidth / 718);
+				if ((top + animationMagnitude) < bannerY)
+					this.bannerOffsetY = bannerY - top - animationMagnitude;
+				img.style.top = (top + this.bannerOffsetY) + "px";
+				return [left, top];
+			};
+			
 			resizeImg(room1, bannerWidth / 2.5, null, 1024, 1024);
 			resizeImg(room2, bannerWidth / 2.2, null, 1024, 1097);
 			resizeImg(room3, bannerWidth / 2.25, null, 1024, 812);
 			resizeImg(room4, bannerWidth / 1.2, null, 1024, 602);
 			
-			posImg(room1, 0, 50);
-			posImg(room2, 400, 0);
-			posImg(room3, 300, 230);
-			posImg(room4, -150, 320);
+			this.computedRoomsPosition[0] = posImg(room1, 0, 50, this.animationMagnitude[0]);
+			this.computedRoomsPosition[1] = posImg(room2, 400, 0, this.animationMagnitude[1]);
+			this.computedRoomsPosition[2] = posImg(room3, 290, 230, this.animationMagnitude[2]);
+			this.computedRoomsPosition[3] = posImg(room4, -150, 320, this.animationMagnitude[3]);
 			
 			// Add animation
 			if (!this.areRoomsAnimationsInitialized) {
 				rooms.forEach((room, index) => {
 					this.intervalsRooms[index] = setInterval(() => {
 						if (this.animationGoingDown[index])
-							room.style.top = room.getBoundingClientRect().y + this.animationMagnitude[index] + "px";
+							room.style.top = this.computedRoomsPosition[index][1] + this.animationMagnitude[index] + "px";
 						else
-							room.style.top = room.getBoundingClientRect().y - this.animationMagnitude[index] + "px";
+							room.style.top = this.computedRoomsPosition[index][1] - this.animationMagnitude[index] + "px";
 						this.animationGoingDown[index] = !this.animationGoingDown[index];
 					}, this.animationDuration[index] * 1000)
 				});
