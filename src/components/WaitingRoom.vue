@@ -28,14 +28,14 @@
 					<li v-for="player in players" :key="player.id">
 						<p class="d-inline" :class="{'font-weight-bold': player.id === currentPlayer.id}">{{player.name}}</p>
 						<p v-if="player.isRoomOwner" class="text-owner d-inline">owner</p>
-						<a @click="disconnect(player)" v-if="player.isCurrentUser || currentPlayer.isRoomOwner" class="d-inline remove-current-player"><i class="material-icons" :title="getRemoveButtonTooltip(player)">remove_circle</i></a>
+						<a @click="disconnect(player)" v-if="player.isCurrentUser /*|| currentPlayer.isRoomOwner*/" class="d-inline remove-current-player"><i class="material-icons" :title="getRemoveButtonTooltip(player)">remove_circle</i></a>
 					</li>
 				</ul>
 			</div>
 		</div>
 		
-		<div v-if="currentPlayer.isRoomOwner" class="row d-flex justify-content-center">
-			<button @click="play" class="btn btn-lg btn-primary col-xl-6 col-lg-6 col-md-6 col-sm-12">Play</button>
+		<div v-if="currentPlayer && currentPlayer.isRoomOwner" class="row d-flex justify-content-center">
+			<button @click="startGame" class="btn btn-lg btn-primary col-xl-6 col-lg-6 col-md-6 col-sm-12">Play</button>
 		</div>
 	</div>
 </template>
@@ -47,6 +47,20 @@ export default {
 		return {
 			currentGame: 0,
 		};
+	},
+	sockets: {
+		userEnter: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("userEnter", data)')
+		},
+		userLeave: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("userLeave", data)')
+		},
+		roomError: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
+		},
+		gameStarted: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("gameStarted", data)')
+		}
 	},
 	methods: {
 		copyLink() {
@@ -84,6 +98,16 @@ export default {
 			else if (this.currentPlayer.isRoomOwner)
 				return "Disconnect player from room";
 		},
+		startGame(){
+			const jsonStringMessage =  JSON.stringify({
+				user: this.$store.getters.username,
+				type: "startGame",
+				room: this.$store.getters.roomName,
+				//TODO change game name with the right game choosen
+				content: "ChatGame",
+			});
+			this.$socket.emit('startGame', jsonStringMessage);
+		},
 		play() {
 			// noinspection JSCheckFunctionSignatures
 			this.$router.push({name: "room", params: { id: this.roomId }})
@@ -92,14 +116,38 @@ export default {
 			// Disconnecting current player
 			if (player.id === this.currentPlayer.id) {
 				console.log(`Disconnecting yourself ${this.currentPlayer.name} from room ${this.roomId}...`);
+				this.leaveRoom(player);
+				this.resetRoom();
+				this.$store.dispatch("onPlayersRemoved", player.name);
 				this.$router.push('/');
 			}
+			// TODO check if we want to disconnect other users
 			// Disconnecting other player from the room
-			else if (this.currentPlayer.isRoomOwner) {
-				console.log(`Disconnecting player ${player.name} from room ${this.roomId}...`);
-				this.$store.dispatch("onPlayersRemoved", player);
-			}
+			// else if (this.currentPlayer.isRoomOwner) {
+			// 	console.log(`Disconnecting player ${player.name} from room ${this.roomId}...`);
+			// 	this.leaveRoom(player);
+			// 	this.$store.dispatch("onPlayersRemoved", player.name);
+			// }
 		},
+		resetRoom(){
+			this.$store.dispatch("onRoomNameChanged", "");
+			this.$store.dispatch("onOwnerChanged", "");
+			this.$store.dispatch("onUsernameChanged", "");
+		},
+		changePlayers(players){
+			this.$store.dispatch("onPlayersChanged", players);
+			if(this.$store.getters.players.length === 0)
+				this.$router.replace("/")
+		},
+		leaveRoom(player){
+			const jsonStringMessage =  JSON.stringify({
+				user: player.name,
+				type: "userLeave",
+				room: this.$store.getters.roomName,
+				content: player,
+			});
+			this.$socket.emit('userLeave', jsonStringMessage);
+		}
 	},
 	computed: {
 		roomId() {
@@ -112,6 +160,9 @@ export default {
 			return this.$store.getters.availableGames;
 		},
 		players() {
+			if (this.$store.getters.players.length === 0)
+				return;
+			
 			// Copy the players list
 			let list = [...this.$store.getters.players];
 			
@@ -137,6 +188,46 @@ export default {
 			return this.$store.getters.players.find(player => player.isCurrentUser);
 		},
 	},
+	created () {
+		if(this.$store.getters.players.length === 0 || this.$store.getters.owner.length === 0
+			|| this.$store.getters.username === 0) { //room is incomplete go back to lobby
+			this.resetRoom();
+			this.$router.push('/');
+		}
+		if(this.$store.getters.username.length > 0){
+			this.$socket.emit("checkAuth", JSON.stringify({
+				user: this.$store.getters.username,
+				type: "checkAuth",
+				content: this.$socket.id,
+			}), (result) => {
+				if(!result){
+					this.resetRoom();
+					this.$router.push('/');
+				}
+			});
+		}
+		
+		this.$options.sockets.userEnter = (data) => {
+			const message = JSON.parse(data);
+			this.changePlayers(message.content);
+		};
+		
+		this.$options.sockets.userLeave = (data) => {
+			const message = JSON.parse(data);
+			this.changePlayers(message.content);
+		};
+		
+		this.$options.sockets.roomError = (data) => {
+			const message = JSON.parse(data);
+			console.log(message.content)
+		};
+		
+		this.$options.sockets.gameStarted = (data) => {
+			const message = JSON.parse(data);
+			//TODO play the right game depending on game choosen
+			this.play();
+		};
+	}
 };
 </script>
 

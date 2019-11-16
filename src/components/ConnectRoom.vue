@@ -76,6 +76,20 @@ export default {
 			searchRoomErrorVisibility: false,
 		};
 	},
+	sockets: {
+		roomCreated: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomCreated", data)')
+		},
+		roomJoined: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomJoined", data)')
+		},
+		roomError: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
+		},
+		redirect: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("redirect", data)')
+		}
+	},
 	mounted() {
 		this.usernamePlaceholder = this.generateName(4);
 		this.searchRoomPlaceholder = this.generateName(2, undefined, '-');
@@ -104,12 +118,6 @@ export default {
 				this.usernameErrorVisibility = true;
 				error = true;
 			}
-			// TODO: Check server-side if username is unique
-			else if (this === null) {
-				this.usernameErrorMessage = "This username is already taken.";
-				this.usernameErrorVisibility = true;
-				error = true;
-			}
 			else
 				this.usernameErrorVisibility = false;
 			
@@ -130,22 +138,86 @@ export default {
 				console.log(`Connecting ${this.username} in the room ${this.searchRoom}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
 				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
-				this.nextPage(this.searchRoom);
+				this.$socket.emit('joinRoom',  JSON.stringify({
+					user: this.$store.getters.username,
+					type: "create",
+					content: this.searchRoom,
+				}));
 			}
 		},
 		onCreateRoomClicked() {
 			if (this.checkFields(false)) {
-				this.searchRoom = this.generateName(1, false, '-');
-				console.log(`Creating the room ${this.searchRoom} for ${this.username}...`);
+				console.log(`Creating a room for ${this.username}...`);
 				this.$store.dispatch("onUsernameChanged", this.username);
-				this.$store.dispatch("onRoomNameChanged", this.searchRoom);
-				this.nextPage(this.searchRoom);
+				this.$socket.emit('createRoom',  JSON.stringify({
+					user: this.$store.getters.username,
+					type: "create",
+					content: "",
+				}));
 			}
 		},
 		nextPage(id) {
 			this.$router.push({ name: "waiting-room", params: { id: id }})
 		},
+		reset(){
+			this.$store.dispatch("onRoomNameChanged", "");
+			this.$store.dispatch("onOwnerChanged", "");
+			this.$store.dispatch("onPlayersChanged", []);
+			this.$store.dispatch("onMessagesChanged", []);
+		},
+		changePlayers(players){
+			this.$store.dispatch("onPlayersChanged", players);
+			if(this.$store.getters.players.length === 0)
+				this.$router.replace("/")
+		}
 	},
+	computed : {
+		currentPlayer() {
+			return this.$store.getters.players.find(player => player.isCurrentUser);
+		}
+	},
+	created () {
+		//if user come back to this page he leaves game room
+		if(this.$store.getters.username.length > 0){
+			this.$socket.emit("userLeave", JSON.stringify({
+				user: this.$store.getters.username,
+				type: "userLeave",
+				room: this.$store.getters.roomName,
+				content: this.currentPlayer,
+			}));
+			this.reset();
+		}
+		
+		this.$options.sockets.roomCreated = (data) => {
+			const message = JSON.parse(data);
+			this.$store.dispatch("onRoomNameChanged", message.room);
+			this.$store.dispatch("onOwnerChanged", message.user);
+			this.$store.dispatch("onPlayersChanged", message.content);
+			this.nextPage(message.room);
+		};
+		
+		this.$options.sockets.roomJoined = (data) => {
+			const message = JSON.parse(data);
+			const content = JSON.parse(message.content);
+			console.log(message);
+			this.$store.dispatch("onRoomNameChanged", content.name);
+			this.$store.dispatch("onOwnerChanged", content.owner);
+			this.changePlayers(content.users);
+			this.nextPage(content.name);
+		};
+		
+		this.$options.sockets.roomError = (data) => {
+			const message = JSON.parse(data);
+			const content = JSON.parse(message.content);
+			if(content.error === "user"){
+				this.usernameErrorMessage = content.message;
+				this.usernameErrorVisibility = true;
+			}else if(content.error === "room"){
+				this.searchRoomErrorMessage = content.message;
+				this.searchRoomErrorVisibility = true;
+			}
+		};
+	}
 };
 </script>
 
