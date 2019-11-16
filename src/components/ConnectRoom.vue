@@ -163,6 +163,7 @@ export default {
 			this.$store.dispatch("onRoomNameChanged", "");
 			this.$store.dispatch("onOwnerChanged", "");
 			this.$store.dispatch("onPlayersChanged", []);
+			this.$store.dispatch("onMessagesChanged", []);
 		},
 		changePlayers(players){
 			this.$store.dispatch("onPlayersChanged", players);

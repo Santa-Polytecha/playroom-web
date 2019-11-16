@@ -31,6 +31,11 @@ import CanvasContainer from "./CanvasContainer";
 export default {
 	name: "Room",
 	components: { CanvasContainer, ChatBox, Toolbar },
+	sockets: {
+		chatMessage: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("newMessage", data)')
+		}
+	},
 	computed: {
 		roomId() {
 			if (this.$route.params.hasOwnProperty("id"))
@@ -39,6 +44,21 @@ export default {
 				return this.$store.getters.roomName;
 		},
 	},
+	created () {
+		if(this.$store.getters.players.length === 0 || this.$store.getters.owner.length === 0
+			|| this.$store.getters.username === 0) { //room is incomplete go back to lobby
+			this.resetRoom();
+			this.$router.push('/');
+		}
+		
+		this.$options.sockets.chatMessage = (data) => {
+			const message = JSON.parse(data);
+			if(message.user !== this.$store.getters.username){
+				const content = JSON.parse(message.content);
+				this.$store.dispatch("onMessagesAdded", content);
+			}
+		};
+	}
 };
 </script>
 

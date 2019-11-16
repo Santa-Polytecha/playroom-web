@@ -35,7 +35,7 @@
 		</div>
 		
 		<div v-if="currentPlayer && currentPlayer.isRoomOwner" class="row d-flex justify-content-center">
-			<button @click="play" class="btn btn-lg btn-primary col-xl-6 col-lg-6 col-md-6 col-sm-12">Play</button>
+			<button @click="startGame" class="btn btn-lg btn-primary col-xl-6 col-lg-6 col-md-6 col-sm-12">Play</button>
 		</div>
 	</div>
 </template>
@@ -97,6 +97,16 @@ export default {
 				return "Disconnect from this room";
 			else if (this.currentPlayer.isRoomOwner)
 				return "Disconnect player from room";
+		},
+		startGame(){
+			const jsonStringMessage =  JSON.stringify({
+				user: this.$store.getters.username,
+				type: "startGame",
+				room: this.$store.getters.roomName,
+				//TODO change game name with the right game choosen
+				content: "ChatGame",
+			});
+			this.$socket.emit('startGame', jsonStringMessage);
 		},
 		play() {
 			// noinspection JSCheckFunctionSignatures
@@ -214,6 +224,7 @@ export default {
 		
 		this.$options.sockets.gameStarted = (data) => {
 			const message = JSON.parse(data);
+			//TODO play the right game depending on game choosen
 			this.play();
 		};
 	}

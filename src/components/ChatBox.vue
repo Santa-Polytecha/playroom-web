@@ -65,6 +65,15 @@ export default {
 					fromMe: true,
 					content: this.writingMessage,
 				});
+				
+				const jsonStringMessage =  JSON.stringify({
+					user: this.username,
+					type: "newMessage",
+					room: this.$store.getters.roomName,
+					content: this.writingMessage,
+				});
+				this.$socket.emit('newMessage', jsonStringMessage);
+				
 				// Empty text field
 				this.writingMessage = '';
 				
