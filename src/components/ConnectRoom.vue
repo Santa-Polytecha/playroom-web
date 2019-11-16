@@ -170,13 +170,19 @@ export default {
 				this.$router.replace("/")
 		}
 	},
+	computed : {
+		currentPlayer() {
+			return this.$store.getters.players.find(player => player.isCurrentUser);
+		}
+	},
 	created () {
 		//if user come back to this page he leaves game room
 		if(this.$store.getters.username.length > 0){
 			this.$socket.emit("userLeave", JSON.stringify({
 				user: this.$store.getters.username,
 				type: "userLeave",
-				content: this.$socket.id,
+				room: this.$store.getters.roomName,
+				content: this.currentPlayer,
 			}));
 			this.reset();
 		}
