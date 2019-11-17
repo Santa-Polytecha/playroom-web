@@ -78,6 +78,7 @@ export default {
 			
 			this.$refs['canvas-element'].addEventListener("mouseleave", function(e){
 				paint = false;
+				sendDrawing(clickX,clickY, clickDrag);
 				clickX = [];
 				clickY = [];
 				clickDrag = [];
