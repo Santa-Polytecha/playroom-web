@@ -36,7 +36,6 @@ export default {
 			this.context.lineJoin = "round";
 			this.context.lineWidth = 5;
 			
-			this.context.strokeRect(0,0, this.$refs['canvas-element'].width, this.$refs['canvas-element'].height);
 			this.draw();
 		},
 		clearScreen(){
