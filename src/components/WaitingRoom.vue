@@ -107,7 +107,7 @@ export default {
 				type: "startGame",
 				room: this.$store.getters.roomName,
 				//TODO change game name with the right game choosen
-				content: "ChatGame",
+				content: "CollaborativeDrawing",
 			});
 			this.$socket.emit('startGame', jsonStringMessage);
 		},

@@ -156,6 +156,7 @@ export default {
 	flex-grow: 0;
 	flex-shrink: 1;
 	flex-basis: auto;
+	height: 100%;
 	.row {
 		display: flex;
 		flex-direction: row;
