@@ -60,6 +60,9 @@ export default {
 		},
 		gameStarted: function (data) {
 			console.log('this method was fired by the socket server. eg: io.emit("gameStarted", data)')
+		},
+		changeOwner: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("changeOwner", data)')
 		}
 	},
 	methods: {
@@ -136,8 +139,10 @@ export default {
 		},
 		changePlayers(players){
 			this.$store.dispatch("onPlayersChanged", players);
-			if(this.$store.getters.players.length === 0)
+			if(this.$store.getters.players.length === 0){
+				this.$store.dispatch("onGameRestart");
 				this.$router.replace("/")
+			}
 		},
 		leaveRoom(player){
 			const jsonStringMessage =  JSON.stringify({
@@ -220,6 +225,11 @@ export default {
 		this.$options.sockets.roomError = (data) => {
 			const message = JSON.parse(data);
 			console.log(message.content)
+		};
+		
+		this.$options.sockets.changeOwner = (data) => {
+			const message = JSON.parse(data);
+			this.$store.dispatch("onOwnerChanged", message.content.name);
 		};
 		
 		this.$options.sockets.gameStarted = (data) => {

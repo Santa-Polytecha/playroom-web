@@ -106,6 +106,9 @@ export const actions = {
 	onMessagesAdded(toolkit, payload) {
 		toolkit.commit("addMessage", payload);
 	},
+	onGameRestart(toolkit) {
+		toolkit.commit("restart");
+	},
 };
 
 export const mutations = {
@@ -114,6 +117,9 @@ export const mutations = {
 	},
 	setOwner(state, payload) {
 		state.owner = payload;
+		state.players.forEach(player =>{
+			player.isRoomOwner = player.name === payload
+		})
 	},
 	setRoomName(state, payload) {
 		state.roomName = payload;
@@ -156,4 +162,11 @@ export const mutations = {
 		}
 		state.messages.push(payload);
 	},
+	restart(state){
+		state.players = [];
+		state.messages = [];
+		state.roomName = "";
+		state.username = "";
+		state.owner = "";
+	}
 };

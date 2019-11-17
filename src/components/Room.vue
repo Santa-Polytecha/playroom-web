@@ -34,7 +34,13 @@ export default {
 	sockets: {
 		chatMessage: function (data) {
 			console.log('this method was fired by the socket server. eg: io.emit("newMessage", data)')
-		}
+		},
+		userEnter: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("userEnter", data)')
+		},
+		userLeave: function (data) {
+			console.log('this method was fired by the socket server. eg: io.emit("userLeave", data)')
+		},
 	},
 	computed: {
 		roomId() {
@@ -42,6 +48,15 @@ export default {
 				return this.$route.params.id;
 			else
 				return this.$store.getters.roomName;
+		},
+	},
+	methods: {
+		changePlayers(players){
+			this.$store.dispatch("onPlayersChanged", players);
+			if(this.$store.getters.players.length === 0){
+				this.$store.dispatch("onGameRestart");
+				this.$router.replace("/")
+			}
 		},
 	},
 	created () {
@@ -57,6 +72,16 @@ export default {
 				const content = JSON.parse(message.content);
 				this.$store.dispatch("onMessagesAdded", content);
 			}
+		};
+		
+		this.$options.sockets.userEnter = (data) => {
+			const message = JSON.parse(data);
+			this.changePlayers(message.content);
+		};
+		
+		this.$options.sockets.userLeave = (data) => {
+			const message = JSON.parse(data);
+			this.changePlayers(message.content);
 		};
 	}
 };

@@ -85,9 +85,6 @@ export default {
 		},
 		roomError: function (data) {
 			console.log('this method was fired by the socket server. eg: io.emit("roomError", data)')
-		},
-		redirect: function (data) {
-			console.log('this method was fired by the socket server. eg: io.emit("redirect", data)')
 		}
 	},
 	mounted() {
@@ -160,16 +157,18 @@ export default {
 			this.$router.push({ name: "waiting-room", params: { id: id }})
 		},
 		reset(){
-			this.$store.dispatch("onRoomNameChanged", "");
-			this.$store.dispatch("onOwnerChanged", "");
-			this.$store.dispatch("onPlayersChanged", []);
-			this.$store.dispatch("onMessagesChanged", []);
+			this.$store.dispatch("onGameRestart");
 		},
 		changePlayers(players){
 			this.$store.dispatch("onPlayersChanged", players);
-			if(this.$store.getters.players.length === 0)
+			if(this.$store.getters.players.length === 0){
+				this.reset();
 				this.$router.replace("/")
-		}
+			}
+		},
+		play(name) {
+			this.$router.push({name: "room", params: { id: name }})
+		},
 	},
 	computed : {
 		currentPlayer() {
@@ -178,7 +177,7 @@ export default {
 	},
 	created () {
 		//if user come back to this page he leaves game room
-		if(this.$store.getters.username.length > 0){
+		if(this.$store.getters.username.length > 0 && this.currentPlayer){
 			this.$socket.emit("userLeave", JSON.stringify({
 				user: this.$store.getters.username,
 				type: "userLeave",
@@ -199,11 +198,15 @@ export default {
 		this.$options.sockets.roomJoined = (data) => {
 			const message = JSON.parse(data);
 			const content = JSON.parse(message.content);
-			console.log(message);
 			this.$store.dispatch("onRoomNameChanged", content.name);
-			this.$store.dispatch("onOwnerChanged", content.owner);
+			this.$store.dispatch("onOwnerChanged", content.owner.name);
 			this.changePlayers(content.users);
-			this.nextPage(content.name);
+			
+			if(content.gameStarted){
+				this.play(content.name);
+			}else{
+				this.nextPage(content.name);
+			}
 		};
 		
 		this.$options.sockets.roomError = (data) => {
