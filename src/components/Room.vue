@@ -58,6 +58,11 @@ export default {
 				this.$router.replace("/")
 			}
 		},
+		resetRoom(){
+			this.$store.dispatch("onRoomNameChanged", "");
+			this.$store.dispatch("onOwnerChanged", "");
+			this.$store.dispatch("onUsernameChanged", "");
+		}
 	},
 	created () {
 		if(this.$store.getters.players.length === 0 || this.$store.getters.owner.length === 0
